@@ -1,0 +1,14 @@
+.burgerMenu {
+  background-color: #ff9414;
+  border-radius: 8px;
+  padding: 13px 25px;
+  gap: 16px;
+}
+
+.burgerMenu h3{
+    color: #fff;
+    font-size: 18px;
+    line-height: 23.94px;
+    font-weight: 700;
+    margin: 0;
+}

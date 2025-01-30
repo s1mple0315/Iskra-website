@@ -1,0 +1,30 @@
+.searchBarContainer {
+  padding: 13px 20px;
+  background-color: #f0f0f5;
+  border-radius: 8px;
+  height: 100%;
+}
+
+.searchBarContainer > svg{
+  margin-left: 10px;
+}
+
+.searchBarContainer input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  height: 100%;
+  width: 100%;
+  color: #1f2029;
+  font-size: 15px;
+  line-height: 19.95px;
+  font-weight: 600;
+}
+
+.searchBarContainer input::placeholder {
+  color: #1f2029;
+  font-size: 15px;
+  line-height: 19.95px;
+  font-weight: 600;
+  opacity: 0.5;
+}

@@ -1,0 +1,76 @@
+.header {
+  background-color: #fff;
+  margin-bottom: 40px;
+}
+
+.headerTop,
+.headerMiddle,
+.headerBottom {
+  border-bottom: 1px solid rgba(31, 32, 41, 0.1);
+}
+
+.headerTop {
+  padding: 10px 0;
+}
+
+.headerTop > div {
+  gap: 107px;
+}
+
+.headerTopRight p{
+  color: #1F2029;
+  margin: 0;
+  font-size: 16px;
+  line-height: 21.28px;
+  font-weight: 600;
+}
+
+.headerMiddleLeft{
+  width: 75%;
+}
+
+.searchBarContainer{
+  flex: 1;
+}
+
+.headerTopLinks ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 32px;
+}
+
+.headerTopLinks ul li a {
+  color: #272525;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 19.6px;
+  font-weight: 500;
+  opacity: 0.5;
+}
+
+.appLogo p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 15.96px;
+  font-weight: 600;
+}
+
+.headerMiddle,
+.headerBottom {
+  padding: 13px 0;
+}
+
+.headerBottom ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.headerBottom ul li a {
+  color: #1f2029;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 18.2px;
+  font-weight: 600;
+}

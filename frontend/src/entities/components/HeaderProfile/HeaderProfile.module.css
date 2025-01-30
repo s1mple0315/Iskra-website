@@ -1,0 +1,11 @@
+.headerProfile {
+  gap: 10px;
+}
+
+.headerProfile h3 {
+  color: #272525;
+  margin: 0;
+  font-size: 15px;
+  line-height: 19.95px;
+  font-weight: 600;
+}

@@ -1,0 +1,29 @@
+.headerBasket {
+    gap: 10px;
+}
+
+.headerBasket > div {
+  position: relative;
+}
+
+.headerBasket h3 {
+  color: #272525;
+  font-size: 15px;
+  line-height: 19.95px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.badge {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: -5px;
+    right: -5px;
+    background-color: #FF9414;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    line-height: 15.96px;
+    font-weight: 600;
+  }

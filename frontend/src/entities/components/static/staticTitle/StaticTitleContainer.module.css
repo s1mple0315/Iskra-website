@@ -1,0 +1,22 @@
+.container{
+    position: relative;
+    width: 100%;
+    height: 250px;
+    padding: 61px 59px 103px;
+    background-color: #FF9414;
+    border-radius: 8px;
+    color: #fff;
+}
+
+.container h1{
+    max-width: 50%;
+    font-size: 36px;
+    line-height: 43.2px;
+    font-weight: 700;
+}
+
+.container svg{
+    position: absolute;
+    right: 5%;
+    top: -25%;
+}
