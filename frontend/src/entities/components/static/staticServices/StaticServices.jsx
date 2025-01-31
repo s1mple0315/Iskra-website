@@ -8,34 +8,34 @@ import ConciergeService from "../../../../shared/ui/icons/static/bottomServices/
 const StaticServices = () => {
   return (
     <div className={styles.staticServicesContainer}>
-      <div className="d-flex justify-content-evenly align-items-center gap-2">
-        <div className="d-flex flex-column justify-content-center gap-3">
-          <div className={`${styles.iconContainer}`}>
+      <div className={styles.gridContainer}>
+        <div className={styles.gridItem}>
+          <div className={styles.iconContainer}>
             <QuickDelivery />
           </div>
           <h3>Быстрая доставка</h3>
           <p>Вслушивайтесь, и вы услышите как торопится наш курьер</p>
         </div>
-        <div className="d-flex flex-column justify-content-center gap-3">
-          <div className={`${styles.iconContainer}`}>
+        <div className={styles.gridItem}>
+          <div className={styles.iconContainer}>
             <SimpleReturn />
           </div>
           <h3>Простой возврат</h3>
           <p>Мы поможем с этим, если что-то пошло не так</p>
         </div>
-        <div className="d-flex flex-column justify-content-center gap-3">
-          <div className={`${styles.iconContainer}`}>
+        <div className={styles.gridItem}>
+          <div className={styles.iconContainer}>
             <Discount />
           </div>
           <h3>Скидки и акции</h3>
           <p>Каждый день, специально для вас</p>
         </div>
-        <div className="d-flex flex-column justify-content-center gap-3">
-          <div className={`${styles.iconContainer}`}>
+        <div className={styles.gridItem}>
+          <div className={styles.iconContainer}>
             <ConciergeService />
           </div>
           <h3>Консьерж-сервис</h3>
-          <p>Помощь при выборе и экспулатации гаджета</p>
+          <p>Мы всегда готовы помочь вам</p>
         </div>
       </div>
     </div>

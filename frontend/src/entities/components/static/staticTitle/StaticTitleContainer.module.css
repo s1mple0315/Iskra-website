@@ -1,4 +1,4 @@
-.container{
+.container {
     position: relative;
     width: 100%;
     height: 250px;
@@ -6,17 +6,55 @@
     background-color: #FF9414;
     border-radius: 8px;
     color: #fff;
-}
-
-.container h1{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .container h1 {
     max-width: 50%;
     font-size: 36px;
     line-height: 43.2px;
     font-weight: 700;
-}
-
-.container svg{
+    z-index: 1; /* Ensure text is on top */
+  }
+  
+  .container svg {
     position: absolute;
     right: 5%;
     top: -25%;
-}
+    z-index: 0; /* Ensure icon is behind text */
+  }
+  
+  @media (max-width: 1024px) {
+    .container svg {
+      /* width: 120px; */
+      /* height: 125px; */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      justify-content: center;
+    }
+  
+    .container h1 {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+  
+    .container svg {
+      right: 50%;
+      transform: translateX(50%);
+      /* width: 100px; */
+      /* height: 105px; */
+      opacity: 0.5; /* Optional: make the icon semi-transparent */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container svg {
+      /* width: 80px; */
+      /* height: 85px; */
+    }
+  }
