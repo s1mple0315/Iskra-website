@@ -264,3 +264,72 @@ async def filter_products(
         "page": page,
         "limit": limit
     }
+
+# Delete a Category
+@router.delete("/categories/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_category(category_id: str):
+    db = get_database()
+
+    # Check if the category exists
+    category = await db.categories.find_one({"_id": ObjectId(category_id)})
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+
+    # If it's a parent category, delete all subcategories and their products
+    if category.get("parent_id") is None:  # Parent category
+        # Recursive function to delete subcategories and their products
+        async def delete_subcategories(cat_id: str):
+            subcategories_cursor = db.categories.find({"parent_id": ObjectId(cat_id)})
+            subcategories = []
+            async for subcategory in subcategories_cursor:
+                subcategories.append(subcategory["_id"])
+                await delete_subcategories(str(subcategory["_id"]))  # Recursively delete subcategories
+
+            # Delete all products associated with these subcategories
+            if subcategories:
+                await db.products.delete_many({"category_id": {"$in": [ObjectId(cid) for cid in subcategories]}})
+
+            # Delete the subcategories themselves
+            await db.categories.delete_many({"parent_id": ObjectId(cat_id)})
+
+        # Start recursive deletion
+        await delete_subcategories(category_id)
+
+    # Delete the category itself
+    result = await db.categories.delete_one({"_id": ObjectId(category_id)})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=400, detail="Failed to delete category")
+
+    # Remove the category from the parent's subcategories list (if applicable)
+    if category.get("parent_id"):
+        await db.categories.update_one(
+            {"_id": ObjectId(category["parent_id"])},
+            {"$pull": {"subcategories": ObjectId(category_id)}}
+        )
+
+    return {"message": "Category deleted successfully"}
+
+
+# Delete a Product
+@router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_product(product_id: str):
+    db = get_database()
+
+    # Check if the product exists
+    product = await db.products.find_one({"_id": ObjectId(product_id)})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    # Remove the product from the category's products list
+    category_id = product["category_id"]
+    await db.categories.update_one(
+        {"_id": ObjectId(category_id)},
+        {"$pull": {"products": ObjectId(product_id)}}
+    )
+
+    # Delete the product itself
+    result = await db.products.delete_one({"_id": ObjectId(product_id)})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=400, detail="Failed to delete product")
+
+    return {"message": "Product deleted successfully"}
