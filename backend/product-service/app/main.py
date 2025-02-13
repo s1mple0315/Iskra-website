@@ -1,16 +1,17 @@
 from fastapi import FastAPI
 from app.routers import products
-from app.database import initialize_text_index
+from app.database import connect_redis, initialize_indexes  # ✅ Ensure `initialize_indexes` is imported
 import asyncio
 
 app = FastAPI()
 
-app.include_router(products.router)
-
 @app.on_event("startup")
 async def startup_event():
-    # Initialize the text index on startup
-    await initialize_text_index()
+    print("🔄 Initializing services...")
+    await connect_redis()  # ✅ Ensure Redis initializes BEFORE loading routes
+    await initialize_indexes()  # ✅ Ensure MongoDB indexes are created
+
+app.include_router(products.router)  # ✅ Now routes will load AFTER Redis is ready
 
 @app.get("/")
 def read_root():

@@ -1,87 +1,64 @@
-from bson import ObjectId
-from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
-from pydantic.json_schema import JsonSchemaValue
-from pydantic_core import core_schema
 from pydantic import BaseModel, Field
 from typing import List, Optional
+from bson import ObjectId
 
-# Custom ObjectId class for Pydantic compatibility
-class PyObjectId(ObjectId):
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
+# Convert ObjectId to string helper function
+def object_id_to_str(oid):
+    return str(oid) if isinstance(oid, ObjectId) else oid
 
-    @classmethod
-    def validate(cls, v):
-        if not ObjectId.is_valid(v):
-            raise ValueError("Invalid ObjectId")
-        return ObjectId(v)
-
-    @classmethod
-    def __get_pydantic_core_schema__(cls, source_type, handler) -> core_schema.CoreSchema:
-        return core_schema.union_schema(
-            [
-                core_schema.is_instance_schema(ObjectId),
-                core_schema.chain_schema(
-                    [
-                        core_schema.str_schema(),
-                        core_schema.no_info_plain_validator_function(cls.validate),
-                    ]
-                ),
-            ]
-        )
-
-    @classmethod
-    def __get_pydantic_json_schema__(
-        cls, core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
-    ) -> JsonSchemaValue:
-        json_schema = handler(core_schema)
-        json_schema.update(type="string", example="64c1a2b3f8b5e9a7b0c1d2e3")
-        return json_schema
-
-
-# Category Models
+# ----------------- CATEGORY MODELS ----------------- #
 class CategoryBase(BaseModel):
+    """Base schema for categories."""
     name: str = Field(..., description="The name of the category")
-    parent_id: Optional[PyObjectId] = Field(None, description="ID of the parent category (only for subcategories)")
+    parent_id: Optional[str] = Field(None, description="ID of the parent category (if it's a subcategory)")
 
-
-class ParentCategory(CategoryBase):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    subcategories: List[PyObjectId] = Field(default_factory=list, description="List of subcategory IDs")
-
-    class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {PyObjectId: str}
-
-
-class ChildCategory(CategoryBase):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    products: List[PyObjectId] = Field(default_factory=list, description="List of product IDs")
+class ParentCategory(BaseModel):
+    """Schema for parent categories that contain subcategories."""
+    id: str = Field(..., alias="_id")  # ✅ Fix: Alias _id to ensure compatibility
+    name: str = Field(..., description="The name of the category")
+    parent_id: Optional[str] = None
+    subcategories: List[str] = Field(default_factory=list, description="List of subcategory IDs")
 
     class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {PyObjectId: str}
+        json_encoders = {ObjectId: object_id_to_str}
+        populate_by_name = True  # ✅ Ensure alias `_id` is properly mapped
+        
 
+class ChildCategory(BaseModel):
+    """Schema for child categories that contain products."""
+    id: str = Field(..., alias="_id")  # ✅ Fix: Ensure `_id` is properly aliased
+    name: str
+    parent_id: str
+    products: List[str] = Field(default_factory=list)
 
-# Product Models
+    class Config:
+        json_encoders = {ObjectId: object_id_to_str}
+        populate_by_name = True  # ✅ Ensure alias `_id` is properly mapped
+        
+# ----------------- PRODUCT MODELS ----------------- #
 class ProductBase(BaseModel):
+    """Base schema for products."""
     name: str = Field(..., description="The name of the product")
     description: str = Field(..., description="A brief description of the product")
     price: float = Field(..., description="The price of the product")
     stock: int = Field(..., description="The available stock of the product")
-    category_id: PyObjectId = Field(..., description="ID of the child category this product belongs to")
+    category_id: str = Field(..., description="ID of the child category this product belongs to")
     brand: Optional[str] = Field(None, description="The brand of the product")
-    series_number: Optional[str] = Field(None, description="The series number of the product")
-    memory: Optional[str] = Field(None, description="The memory capacity of the product (e.g., 8GB, 16GB)")
-    sim_card: Optional[str] = Field(None, description="The SIM card type of the product (e.g., Single SIM, Dual SIM)")
-    processor_type: Optional[str] = Field(None, description="The processor type of the product (e.g., Intel Core i7, Snapdragon 8 Gen 2)")
-    color: Optional[str] = Field(None, description="The color of the product (e.g., Black, Silver)")
 
+    # Indexed common attributes for fast searching
+    memory: Optional[str] = None  # Electronics
+    processor_type: Optional[str] = None  # Electronics
+    isbn: Optional[str] = None  # Books
+    color: Optional[str] = None  # Fashion, accessories
+    material: Optional[str] = None  # Fashion, sports gear
+    size: Optional[str] = None  # Clothes, shoes, bags
+
+    # Flexible attributes for new product fields
+    attributes: dict = Field(default_factory=dict, description="Custom attributes")
 
 class Product(ProductBase):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    """Schema for products stored in the database."""
+    id: str = Field(default_factory=lambda: str(ObjectId()), alias="_id")
 
     class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {PyObjectId: str}
+        json_encoders = {ObjectId: object_id_to_str}
