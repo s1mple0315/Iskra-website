@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.routers import products
-from app.database import connect_redis, initialize_indexes  # ✅ Ensure `initialize_indexes` is imported
+from app.database import connect_redis, initialize_indexes
 import asyncio
 
 app = FastAPI()
