@@ -1,0 +1,127 @@
+{
+  "$schema": "https://www.krakend.io/schema/v2.9/krakend.json",
+  "version": 3,
+  "name": "Iskra API Gateway",
+  "port": 8080,
+  "cache_ttl": "300s",
+  "timeout": "3000ms",
+  "read_timeout": "5s",
+  "write_timeout": "5s",
+  "idle_timeout": "60s",
+  
+  "extra_config": {
+      "telemetry/logging": {
+          "level": "DEBUG",
+          "prefix": "[KRAKEND]",
+          "stdout": true
+      },
+      "security/cors": {
+          "allow_origins": ["*"],
+          "allow_methods": ["GET", "POST", "PUT", "DELETE"],
+          "allow_headers": ["Authorization", "Content-Type"]
+      },
+      "plugin/openapi": {
+          "swagger": true,
+          "title": "Iskra API Gateway",
+          "version": "1.0",
+          "description": "Документация API Gateway для Iskra",
+          "theme": "material"
+      }
+  },
+
+  "endpoints": [
+      {
+          "endpoint": "/api/v1/auth/login",
+          "method": "POST",
+          "backend": [
+              {
+                  "url_pattern": "/api/v1/auth/token",
+                  "host": ["http://user-service:8001"],
+                  "extra_config": {
+                      "backend": {
+                          "encoding": "json"
+                      }
+                  }
+              }
+          ]
+      },
+      {
+          "endpoint": "/api/v1/auth/register",
+          "method": "POST",
+          "backend": [
+              {
+                  "url_pattern": "/api/v1/auth/register",
+                  "host": ["http://user-service:8001"],
+                  "extra_config": {
+                      "backend": {
+                          "encoding": "json"
+                      }
+                  }
+              }
+          ]
+      },
+      {
+          "endpoint": "/api/v1/products/{id}",
+          "method": "GET",
+          "backend": [
+              {
+                  "url_pattern": "/api/v1/products/{id}",
+                  "host": ["http://product-service:8002"],
+                  "querystring_params": ["id"],
+                  "extra_config": {
+                      "backend": {
+                          "encoding": "json"
+                      }
+                  }
+              }
+          ],
+          "extra_config": {
+              "auth/validator": {
+                  "alg": "HS256",
+                  "jwk-url": "http://user-service:8001/api/v1/auth/jwks",
+                  "roles": ["user", "admin"],
+                  "disable_jwk_security": true
+              }
+          }
+      },
+      {
+          "endpoint": "/api/v1/admin/{id}",
+          "method": "GET",
+          "backend": [
+              {
+                  "url_pattern": "/api/v1/admin/{id}",
+                  "host": ["http://user-service:8001"],
+                  "querystring_params": ["id"],
+                  "extra_config": {
+                      "backend": {
+                          "encoding": "json"
+                      }
+                  }
+              }
+          ],
+          "extra_config": {
+              "auth/validator": {
+                  "alg": "HS256",
+                  "jwk-url": "http://user-service:8001/api/v1/auth/jwks",
+                  "roles": ["admin"],
+                  "disable_jwk_security": true
+              }
+          }
+      },
+      {
+          "endpoint": "/__swagger__",
+          "method": "GET",
+          "backend": [
+              {
+                  "url_pattern": "/__swagger__",
+                  "host": ["http://localhost:8080"],
+                  "extra_config": {
+                      "backend": {
+                          "encoding": "json"
+                      }
+                  }
+              }
+          ]
+      }
+  ]
+}

@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   mongodb:
     image: mongo:latest
@@ -42,6 +44,19 @@ services:
     environment:
       MONGO_URI: "mongodb://mongodb:27017/user-db"
       REDIS_URL: "redis://redis:6379"
+
+  krakend:
+    image: devopsfaith/krakend:latest
+    container_name: krakend
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./krakend/krakend.json:/etc/krakend/krakend.json
+    depends_on:
+      - product-service
+      - user-service
+    command: [ "run", "-dc", "/etc/krakend/krakend.json" ]
 
 volumes:
   mongo_data:
