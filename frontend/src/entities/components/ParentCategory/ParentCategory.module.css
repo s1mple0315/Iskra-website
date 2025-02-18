@@ -1,0 +1,34 @@
+.parentCategory{
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 32px 0 37px 32px;
+    width: 280px;
+}
+
+.parentCategory h3{
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 21.6px;
+    margin-bottom: 15px;
+}
+
+.childCategories ul{
+    padding: 0;
+    margin: 0   ;
+}
+
+.childCategories ul li{
+    text-decoration: none;
+    list-style: none;
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 19.95px;
+    opacity: 0.5;
+}
+
+.parentCategoryImage{
+    width: 231px;
+    height: 146px;
+    right: -50px;
+}
