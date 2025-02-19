@@ -12,9 +12,9 @@ const BlogPage = lazy(() => import("../../pages/Blog/BlogPage"));
 const GuaranteePage = lazy(() => import("../../pages/Guarantee/GuaranteePage"));
 
 const CatalogPage = lazy(() => import("../../pages/Catalog/CatalogPage/CatalogPage"));
-const CategoryPage = lazy(() => import("../../pages/Catalog/CategoryPage/CategoryPage"));
-const ProductListPage = lazy(() => import("../../pages/Catalog/ProductListingPage/ProductListingPage"));
+const ProductListingPage = lazy(() => import("../../pages/Catalog/ProductListingPage/ProductListingPage"));
 const ProductDetailsPage = lazy(() => import("../../pages/Catalog/ProductDetailsPage/ProductDetailsPage"));
+const ParentCategoryPage = lazy(() => import("../../pages/Catalog/ParentCategoryPage/ParentCategoryPage"));
 
 const AppRouter = () => {
   return (
@@ -32,8 +32,8 @@ const AppRouter = () => {
 
             {/* Catalog Routes */}
             <Route path="/catalog" element={<CatalogPage />} />
-            <Route path="/catalog/:parentId" element={<CategoryPage />} />
-            <Route path="/catalog/:parentId/:childId" element={<ProductListPage />} />
+            <Route path="/catalog/:id" element={<ParentCategoryPage />} />
+            <Route path="/catalog/:parentId/:subcategoryId" element={<ProductListingPage />} />
             <Route path="/catalog/:parentId/:childId/:productId" element={<ProductDetailsPage />} />
           </Routes>
         </Suspense>

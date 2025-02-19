@@ -7,9 +7,6 @@ from app.database import redis, db
 import json
 from app.database import redis
 
-# if redis is None:
-#     raise RuntimeError("❌ Redis is not initialized. Ensure `connect_redis()` is called in startup.")
-
 
 router = APIRouter(prefix="/api/v1/products", tags=["Products"])
 
@@ -85,11 +82,35 @@ async def get_all_parent_categories():
 
     cursor = db.categories.find({"parent_id": None})
     async for category in cursor:
-        category["_id"] = str(category["_id"])  # ✅ Convert _id to string (fixes issue)
-        category["subcategories"] = [str(sub) for sub in category.get("subcategories", [])]
+        category["_id"] = str(category["_id"])  # ✅ Convert _id to string
+
+        # ✅ Fetch subcategories with both id and name
+        subcategories_data = []
+        for sub_id in category.get("subcategories", []):
+            subcategory = await db.categories.find_one({"_id": ObjectId(sub_id)})
+            if subcategory:
+                subcategories_data.append({
+                    "id": str(subcategory["_id"]),
+                    "name": subcategory["name"]
+                })
+
+        category["subcategories"] = subcategories_data
         parent_categories.append(ParentCategory(**category))
 
     return parent_categories
+
+@router.get("/categories/parents/{category_id}", response_model=ParentCategory)
+async def get_parent_category(category_id: str):
+    db = get_database()
+    category = await db.categories.find_one({"_id": ObjectId(category_id)})
+
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+
+    category["_id"] = str(category["_id"])
+    category["subcategories"] = [{"id": str(sub), "name": "Subcategory Name"} for sub in category.get("subcategories", [])]  # Adjust based on your structure
+    return ParentCategory(**category)
+
 
 @router.get("/categories/{parent_id}/subcategories", response_model=List[ChildCategory])
 async def get_subcategories_of_parent(parent_id: str):

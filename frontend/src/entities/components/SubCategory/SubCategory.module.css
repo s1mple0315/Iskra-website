@@ -1,0 +1,14 @@
+.subCategory {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 32px;
+  border-radius: 8px;
+  width: 314px;
+  height: 266px;
+  cursor: pointer;
+}
+
+.subCategory h3{
+    
+}

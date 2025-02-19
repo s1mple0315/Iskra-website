@@ -17,7 +17,7 @@ class ParentCategory(BaseModel):
     id: str = Field(..., alias="_id")  # ✅ Fix: Alias _id to ensure compatibility
     name: str = Field(..., description="The name of the category")
     parent_id: Optional[str] = None
-    subcategories: List[str] = Field(default_factory=list, description="List of subcategory IDs")
+    subcategories: List[dict] = Field(default_factory=list, description="List of subcategory IDs and Names")
 
     class Config:
         json_encoders = {ObjectId: object_id_to_str}
