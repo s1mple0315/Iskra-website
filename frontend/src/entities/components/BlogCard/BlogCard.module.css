@@ -1,0 +1,40 @@
+.blogCard {
+  width: 206px;
+  height: 230px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.blogCard img {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.blogCard > div {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 5px 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.blogCard > div > h2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: #fff;
+  font-size: 14px;
+  line-height: 19.6px;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+  margin-bottom: 15px;
+  margin-left: 15px;
+}

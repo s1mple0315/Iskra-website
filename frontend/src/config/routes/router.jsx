@@ -8,8 +8,10 @@ const Company = lazy(() => import("../../pages/AboutPage/Company"));
 const DeliveryPage = lazy(() => import("../../pages/Delivery/DeliveryPage"));
 const Contacts = lazy(() => import("../../pages/Contacts/Contacts"));
 const RegularCustomersPage = lazy(() => import("../../pages/RegularCustomers/RegularCustomersPage"));
-const BlogPage = lazy(() => import("../../pages/Blog/BlogPage"));
 const GuaranteePage = lazy(() => import("../../pages/Guarantee/GuaranteePage"));
+
+const BlogListingPage = lazy(() => import("../../pages/Blog/BlogListingPage/BlogListingPage"));
+const BlogDetailsPage = lazy(() => import("../../pages/Blog/BlogDetailsPage/BlogDetailsPage"));
 
 const CatalogPage = lazy(() => import("../../pages/Catalog/CatalogPage/CatalogPage"));
 const ProductListingPage = lazy(() => import("../../pages/Catalog/ProductListingPage/ProductListingPage"));
@@ -28,7 +30,10 @@ const AppRouter = () => {
             <Route path="/delivery" element={<DeliveryPage />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/regular" element={<RegularCustomersPage />} />
-            <Route path="/blog" element={<BlogPage />} />
+
+            {/* Blog Routes */}
+            <Route path="/blog" element={<BlogListingPage />} />
+            <Route path="/blog/:id" element={<BlogDetailsPage />} />
 
             {/* Catalog Routes */}
             <Route path="/catalog" element={<CatalogPage />} />
