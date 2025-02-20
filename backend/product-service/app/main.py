@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from app.routers import products
 from app.database import connect_redis, initialize_indexes
 import asyncio
@@ -19,6 +20,8 @@ async def startup_event():
     print("🔄 Initializing services...")
     await connect_redis() 
     await initialize_indexes()  
+    
+app.mount("/static", StaticFiles(directory="static"), name="static")
     
 app.include_router(products.router) 
 

@@ -3,7 +3,7 @@ import styles from "./ProductCard.module.css";
 
 const ProductCard = ({ description, price }) => {
   return (
-    <div className={`${styles.productCard} d-flex flex-column`}>
+    <div className={`${styles.productCard} d-flex flex-column justify-content-between`}>
       <div className={styles.productImageSlider}>
         <img src="/assets/Catalog/ProductImages/iPhone/iPhone.png" alt="" />
       </div>

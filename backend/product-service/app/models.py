@@ -44,6 +44,8 @@ class ProductBase(BaseModel):
     stock: int = Field(..., description="The available stock of the product")
     category_id: str = Field(..., description="ID of the child category this product belongs to")
     brand: Optional[str] = Field(None, description="The brand of the product")
+    images: List[str] = Field(default_factory=list, description="List of image URLs for the product")
+    # Other fields...
 
     # Indexed common attributes for fast searching
     memory: Optional[str] = None  # Electronics

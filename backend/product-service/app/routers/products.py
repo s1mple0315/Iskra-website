@@ -1,4 +1,8 @@
-from fastapi import APIRouter, HTTPException, status, Query
+import os
+import uuid
+from PIL import Image
+import io
+from fastapi import APIRouter, File, HTTPException, UploadFile, status, Query
 from app.models import ParentCategory, ChildCategory, CategoryBase, Product, ProductBase
 from app.database import get_database
 from bson import ObjectId
@@ -9,6 +13,24 @@ from app.database import redis
 
 
 router = APIRouter(prefix="/api/v1/products", tags=["Products"])
+UPLOAD_DIR = "static/images/products/"
+
+def compress_and_resize_image(file, size=(800, 800), quality=85):
+    img = Image.open(file)
+    
+    # Convert to RGB if the image has an alpha channel (RGBA mode)
+    if img.mode == "RGBA":
+        img = img.convert("RGB")
+    
+    # Resize the image
+    img.thumbnail(size)  # Resize to max dimensions
+    
+    # Save the optimized image to a BytesIO buffer
+    output = io.BytesIO()
+    img.save(output, format="JPEG", quality=quality)
+    output.seek(0)
+    
+    return output
 
 # Create Parent Category
 @router.post("/categories/parent", response_model=ParentCategory, status_code=status.HTTP_201_CREATED)
@@ -46,6 +68,41 @@ async def create_child_category(category: CategoryBase):
     )
 
     return {"id": child_id, "name": category.name, "parent_id": category.parent_id, "products": []}
+
+@router.post("/upload-images/{product_id}", status_code=status.HTTP_201_CREATED)
+async def upload_images(product_id: str, files: list[UploadFile] = File(...)):
+    db = get_database()
+
+    product = await db.products.find_one({"_id": ObjectId(product_id)})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    product_dir = os.path.join(UPLOAD_DIR, product_id)
+    os.makedirs(product_dir, exist_ok=True)
+
+    image_paths = []
+    for file in files:
+        if file.content_type not in ["image/jpeg", "image/png"]:
+            raise HTTPException(status_code=400, detail=f"Invalid file type: {file.filename}")
+
+        optimized_file = compress_and_resize_image(file.file)
+
+        file_extension = os.path.splitext(file.filename)[1]
+        unique_filename = f"{uuid.uuid4()}{file_extension}"
+        file_path = os.path.join(product_dir, unique_filename)
+
+        with open(file_path, "wb") as buffer:
+            buffer.write(optimized_file.read())
+
+        relative_path = f"/static/images/products/{product_id}/{unique_filename}"
+        image_paths.append(relative_path)
+
+    await db.products.update_one(
+        {"_id": ObjectId(product_id)},
+        {"$push": {"images": {"$each": image_paths}}}
+    )
+
+    return {"message": "Images uploaded successfully", "image_paths": image_paths}
 
 
 #Edit categories
@@ -172,24 +229,22 @@ async def create_product(product: ProductBase):
 async def get_products_in_subcategory(subcategory_id: str, page: int = 1, limit: int = 10):
     db = get_database()
 
-    # ✅ Ensure subcategory exists
+    # Ensure subcategory exists
     subcategory = await db.categories.find_one({"_id": ObjectId(subcategory_id)})
     if not subcategory:
         raise HTTPException(status_code=404, detail="Subcategory not found")
 
-    # ✅ Check if subcategory contains products
+    # Fetch products and include images
     product_ids = subcategory.get("products", [])
-
     if not product_ids:
         return {"products": [], "total_count": 0, "page": page, "limit": limit}
 
-    # ✅ Fetch products and properly convert `_id` to string
     product_cursor = db.products.find({"_id": {"$in": [ObjectId(pid) for pid in product_ids]}}).skip((page - 1) * limit).limit(limit)
 
     products = []
     async for product in product_cursor:
-        product["_id"] = str(product["_id"])  # ✅ Convert `_id` to string
-        product["category_id"] = str(product["category_id"])  # ✅ Convert category_id to string
+        product["_id"] = str(product["_id"])
+        product["category_id"] = str(product["category_id"])
         products.append(Product(**product))
 
     total_count = len(product_ids)
@@ -200,7 +255,8 @@ async def get_products_in_subcategory(subcategory_id: str, page: int = 1, limit:
         "page": page,
         "limit": limit
     }
-    
+  
+        
 @router.put("/{product_id}", response_model=Product, status_code=status.HTTP_200_OK)
 async def update_product(product_id: str, updated_data: ProductBase):
     db = get_database()
