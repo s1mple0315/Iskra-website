@@ -14,6 +14,8 @@ const BlogListingPage = () => {
       try {
         const data = await getAllBlogs();
         setBlogs(data);
+        console.log(data);
+        
       } catch (error) {
         setError('Failed to load blogs');
       } finally {
@@ -28,7 +30,7 @@ const BlogListingPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div>
+    <div className={styles.blogListing}>
       <h1>Blog Posts</h1>
       {blogs.length === 0 ? (
         <p>No blogs found.</p>
@@ -39,7 +41,6 @@ const BlogListingPage = () => {
           ))}
         </ul>
       )}
-      <BlogCard />
     </div>
   );
 };

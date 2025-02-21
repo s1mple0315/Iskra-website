@@ -1,0 +1,20 @@
+.blogDetails h1 {
+  font-size: 36px;
+  line-height: 43.2px;
+  font-weight: 700;
+}
+
+.blogContent {
+  width: 962px;
+}
+
+.blogContent > img {
+  height: 542px;
+  border-radius: 8px;
+}
+
+.blogContent > div {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 40px 32px 53px 32px;
+}

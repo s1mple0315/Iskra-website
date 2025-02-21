@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
         <Breadcrumb />
         {children}
       </main>
-      <div className="container">
+      <div className="container mt-5">
         <StaticServices />
       </div>
       <Footer />
