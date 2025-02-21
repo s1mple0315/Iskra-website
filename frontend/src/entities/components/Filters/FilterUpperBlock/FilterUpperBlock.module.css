@@ -1,0 +1,45 @@
+.filterUpperBlock {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 16px 24px 18px 26px;
+  margin-bottom: 20px;
+}
+
+.filterAction {
+  gap: 10px;
+}
+
+.filterAction span {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18.62px;
+}
+
+.filterInfo {
+  gap: 24px;
+}
+
+.filterInfo p {
+  margin: 0;
+}
+
+.filterTotalProducts {
+  gap: 10px;
+}
+
+.filterTotalProducts > p {
+  color: #ff9414;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18.62px;
+}
+
+.filterSort {
+  gap: 12px;
+}
+
+.filterSort > p {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18.62px;
+}

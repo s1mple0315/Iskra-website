@@ -1,9 +1,10 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
 import ProductCard from "../../../entities/components/ProductCard/ProductCard";
-import styles from "./ProductListingPage.module.css"
+import styles from "./ProductListingPage.module.css";
+import FilterUpperBlock from "../../../entities/components/Filters/FilterUpperBlock/FilterUpperBlock";
 
 const ProductListingPage = () => {
   const { subcategoryId } = useParams(); // Get subcategoryId from URL params
@@ -57,12 +58,17 @@ const ProductListingPage = () => {
   return (
     <div className="product-listing-page">
       <h2>Products</h2>
+      <FilterUpperBlock />
       <div className={styles.productListing}>
         {products.length === 0 ? (
           <p>No products found</p>
         ) : (
           products.map((product, index) => (
-            <ProductCard key={index} description={product.description} price={product.price}/>
+            <ProductCard
+              key={index}
+              description={product.description}
+              price={product.price}
+            />
           ))
         )}
       </div>
@@ -88,14 +94,20 @@ const ProductListingPage = () => {
         <span> Page {pagination.page} </span>
         <button
           onClick={() => {
-            if (pagination.page < Math.ceil(pagination.total_count / pagination.limit)) {
+            if (
+              pagination.page <
+              Math.ceil(pagination.total_count / pagination.limit)
+            ) {
               setPagination((prev) => ({
                 ...prev,
                 page: prev.page + 1,
               }));
             }
           }}
-          disabled={pagination.page === Math.ceil(pagination.total_count / pagination.limit)}
+          disabled={
+            pagination.page ===
+            Math.ceil(pagination.total_count / pagination.limit)
+          }
         >
           Next
         </button>
