@@ -1,34 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import useCategoryStore from "../../../config/api//Store/useCategoryStore/UseCategoryStore";
 
 import styles from "./ParentCategoryPage.module.css";
 import SubCategory from "../../../entities/components/SubCategory/SubCategory";
 
 const ParentCategoryPage = () => {
   const { id } = useParams();
-  const [parentCategory, setParentCategory] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    childCategories,
+    parentCategoryName,
+    loading,
+    error,
+    fetchChildCategories,
+  } = useCategoryStore();
 
   useEffect(() => {
-    const fetchParentCategory = async () => {
-      setLoading(true);  
-      try {
-        const response = await axios.get(
-          `http://localhost:8002/api/v1/products/categories/parents/${id}`
-        );
-        setParentCategory(response.data);
-      } catch (err) {
-        setError("Failed to fetch data");
-        console.error(err);
-      } finally {
-        setLoading(false);  
-      }
-    };
-
-    fetchParentCategory();
-  }, [id]);  
+    fetchChildCategories(id);
+  }, [id, fetchChildCategories]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -40,11 +29,11 @@ const ParentCategoryPage = () => {
 
   return (
     <div className={styles.parentCategoryPage}>
-      <h2>{parentCategory.name}</h2>
+      <h2>{parentCategoryName}</h2>
       <div>
         <ul className={styles.subCategories}>
-          {parentCategory.subcategories.map((subcategory) => (
-            <SubCategory key={subcategory.id} name={subcategory.name}/>
+          {childCategories.map((subcategory) => (
+            <SubCategory key={subcategory.id} name={subcategory.name} />
           ))}
         </ul>
       </div>
