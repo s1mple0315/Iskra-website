@@ -14,8 +14,8 @@ const Accordion = ({ title, children }) => {
         className={`${styles.accordionButton} ${isOpen ? styles.active : ""}`}
         onClick={toggleAccordion}
       >
-        <span className={styles.icon}>{isOpen ? "-" : "+"}</span>
         {title}
+        <span className={styles.icon}>{isOpen ? "-" : "+"}</span>
       </button>
       {isOpen && <div className={styles.content}>{children}</div>}
     </div>

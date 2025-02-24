@@ -1,11 +1,12 @@
 .accordion {
   border: 1px solid #ccc;
-  margin-bottom: 10px;
   border-radius: 4px;
   overflow: hidden;
 }
 
 .accordionButton {
+  display: flex;
+  justify-content: space-between;
   background-color: #f7f7f7;
   color: #333;
   padding: 15px;
