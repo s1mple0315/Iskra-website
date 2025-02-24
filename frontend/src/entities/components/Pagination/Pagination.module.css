@@ -19,6 +19,11 @@
   gap: 8px;
 }
 
+.active {
+  color: #ff9414 !important;
+  border-bottom: 4px solid #ff9414 !important;
+}
+
 .pagination > span {
   border: none;
   border-radius: 8px;
