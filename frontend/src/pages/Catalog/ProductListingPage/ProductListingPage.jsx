@@ -5,12 +5,13 @@ import useProductStore from "../../../config/api/Store/useProductStore/UseProduc
 import ProductCard from "../../../entities/components/ProductCard/ProductCard";
 import styles from "./ProductListingPage.module.css";
 import FilterUpperBlock from "../../../entities/components/Filters/FilterUpperBlock/FilterUpperBlock";
+import Pagination from "../../../entities/components/Pagination/Pagination";
 
 const ProductListingPage = () => {
   const { subcategoryId } = useParams();
   const { products, loading, error, fetchProducts, pagination } =
     useProductStore();
-  const [currentPage, setCurrentPage] = useState(pagination.page); 
+  const [currentPage, setCurrentPage] = useState(pagination.page);
 
   useEffect(() => {
     if (subcategoryId) {
@@ -19,7 +20,7 @@ const ProductListingPage = () => {
   }, [subcategoryId, currentPage, pagination.limit, fetchProducts]);
 
   const handlePageChange = (newPage) => {
-    setCurrentPage(newPage); // 
+    setCurrentPage(newPage);
   };
 
   if (loading) {
@@ -33,7 +34,7 @@ const ProductListingPage = () => {
   return (
     <div className="product-listing-page">
       <h2>Products</h2>
-      <FilterUpperBlock total={pagination.total_count}/>
+      <FilterUpperBlock total={pagination.total_count} />
       <div className={styles.productListing}>
         {products.length === 0 ? (
           <p>No products found</p>
@@ -48,27 +49,12 @@ const ProductListingPage = () => {
         )}
       </div>
 
-      <div className="pagination">
-        <p>
-          Showing {pagination.limit} products per page. Total:{" "}
-          {pagination.total_count} products.
-        </p>
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span> Page {currentPage} </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={
-            currentPage === Math.ceil(pagination.total_count / pagination.limit)
-          }
-        >
-          Next
-        </button>
-      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalCount={pagination.total_count}
+        limit={pagination.limit}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import axios from "axios";
 const useCategoryStore = create((set) => ({
   parentCategories: [],
   parentCategoryName: "",
+  parentCategoryId: "",
   childCategories: [],
   loading: false,
   error: null,
@@ -20,7 +21,7 @@ const useCategoryStore = create((set) => ({
     } finally {
       set({ loading: false });
     }
-  },
+  },  
 
   fetchChildCategories: async (parentId) => {
     set({ loading: true });
@@ -30,6 +31,7 @@ const useCategoryStore = create((set) => ({
       );
       set({ childCategories: response.data.subcategories });
       set({ parentCategoryName: response.data.name });
+      set({ parentCategoryId: response.data.id });
       console.log(response.data);
     } catch (err) {
       set({ error: "Failed to fetch child categories" });

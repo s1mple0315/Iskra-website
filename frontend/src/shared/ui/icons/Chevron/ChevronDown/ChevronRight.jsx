@@ -1,0 +1,15 @@
+const ChevronRight = () => {
+  return (
+    <svg
+      width="10"
+      height="16"
+      viewBox="0 0 10 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M1 1L8 8L1 15" stroke="#272525" strokeWidth="2" />
+    </svg>
+  );
+};
+
+export default ChevronRight;

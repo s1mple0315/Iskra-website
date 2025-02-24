@@ -1,6 +1,8 @@
-import styles from "./Header.module.css";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import useCategoryStore from "../../../config/api/Store/useCategoryStore/UseCategoryStore";
 
+import styles from "./Header.module.css";
 import MapPoint from "../../../shared/ui/icons/Layout/MapPoint/MapPoint";
 import HeaderAppLogo from "../../../shared/ui/icons/Layout/Header/AppLogo/HeaderAppLogo";
 import SearchBar from "../SearchBar/SearchBar";
@@ -11,6 +13,21 @@ import HeaderTelegram from "../../../shared/ui/icons/Layout/Header/Social/Telegr
 import HeaderWhatsapp from "../../../shared/ui/icons/Layout/Header/Social/Whatsapp/HeaderWhatsapp";
 
 const Header = () => {
+  const { parentCategories, loading, error, fetchParentCategories } = useCategoryStore();
+
+  // Fetch parent categories when the component mounts
+  useEffect(() => {
+    fetchParentCategories();
+  }, [fetchParentCategories]);
+
+  if (loading) {
+    return <div>Loading categories...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <div className={`${styles.header}  d-flex flex-column`}>
       <header className="container">
@@ -94,41 +111,17 @@ const Header = () => {
         </div>
         <div className={`${styles.headerBottom}`}>
           <ul className="d-flex justify-content-between align-items-center gap-3">
-            <li>
-              <Link to={"/"} title="Apple">
-                Apple
-              </Link>
-            </li>
-            <li>
-              <Link to={"/"} title="Смартфоны и гаджеты">
-                Смартфоны и гаджеты
-              </Link>
-            </li>
-            <li>
-              <Link to={"/"} title="Для дома">
-                Для дома
-              </Link>
-            </li>
-            <li>
-              <Link to={"/"} title="ТВ, аудио и видео">
-                ТВ, аудио и видео
-              </Link>
-            </li>
-            <li>
-              <Link to={"/"} title="Компьютеры и ноутбуки">
-                Компьютеры и ноутбуки
-              </Link>
-            </li>
-            <li>
-              <Link to={"/"} title="Аксессуары">
-                Аксессуары
-              </Link>
-            </li>
-            <li>
-              <Link to={"/"} title="Sale">
-                Sale
-              </Link>
-            </li>
+            {parentCategories.length > 0 ? (
+              parentCategories.map((category) => (
+                <li key={category._id}>
+                  <Link to={`/catalog/${category._id}`} title={category.name}>
+                    {category.name}
+                  </Link>
+                </li>
+              ))
+            ) : (
+              <li>No categories available</li>
+            )}
           </ul>
         </div>
       </header>

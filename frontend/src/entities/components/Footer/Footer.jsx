@@ -1,8 +1,10 @@
-import styles from "./Footer.module.css";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import useCategoryStore from "../../../config/api/Store/useCategoryStore/UseCategoryStore";
 
+import styles from "./Footer.module.css";
 import AppLogo from "../../../shared/ui/icons/Layout/Logo/AppLogo";
-import MapPoint from "../../../shared/ui/icons/Layout/MapPoint/MapPoint"
+import MapPoint from "../../../shared/ui/icons/Layout/MapPoint/MapPoint";
 import Whatsup from "../../../shared/ui/icons/Layout/Social/Whatsup/Whatsup";
 import Telegram from "../../../shared/ui/icons/Layout/Social/Telegram/Telegram";
 import Mir from "../../../shared/ui/icons/Layout/Payment/Mir/Mir";
@@ -10,6 +12,21 @@ import Visa from "../../../shared/ui/icons/Layout/Payment/Visa/Visa";
 import Sbp from "../../../shared/ui/icons/Layout/Payment/Sbp/Sbp";
 
 const Footer = () => {
+  const { parentCategories, loading, error, fetchParentCategories } =
+    useCategoryStore();
+
+  useEffect(() => {
+    fetchParentCategories();
+  }, [fetchParentCategories]);
+
+  if (loading) {
+    return <div>Loading categories...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <div
       className={`${styles.footer} d-flex flex-column justify-content-between`}
@@ -19,8 +36,8 @@ const Footer = () => {
           <div className={`${styles.appLogo} d-flex flex-column gap-3`}>
             <AppLogo />
             <div className="d-flex align-items-center gap-2">
-                <MapPoint />
-                <p>Москва</p>
+              <MapPoint />
+              <p>Москва</p>
             </div>
           </div>
           <div>
@@ -81,36 +98,17 @@ const Footer = () => {
           <div>
             <h3>Каталог</h3>
             <ul>
-              <li>
-                <Link to={"/"} title="Apple">
-                  Apple
-                </Link>
-              </li>
-              <li>
-                <Link to={"/"} title="Смартфоны и гаджеты">
-                  Смартфоны и гаджеты
-                </Link>
-              </li>
-              <li>
-                <Link to={"/"} title="Для дома">
-                  Для дома
-                </Link>
-              </li>
-              <li>
-                <Link to={"/"} title="ТВ, аудио и видео">
-                  ТВ, аудио и видео
-                </Link>
-              </li>
-              <li>
-                <Link to={"/"} title="Компьютеры и ноутбуки">
-                  Компьютеры и ноутбуки
-                </Link>
-              </li>
-              <li>
-                <Link to={"/"} title="Аксессуары">
-                  Аксессуары
-                </Link>
-              </li>
+              {parentCategories.length > 0 ? (
+                parentCategories.map((category) => (
+                  <li key={category._id}>
+                    <Link to={`/catalog/${category._id}`} title={category.name}>
+                      {category.name}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li>Нет категорий</li>
+              )}
             </ul>
           </div>
           <div>
