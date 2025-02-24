@@ -39,7 +39,7 @@ const AppRouter = () => {
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/catalog/:id" element={<ParentCategoryPage />} />
             <Route path="/catalog/:parentId/:subcategoryId" element={<ProductListingPage />} />
-            <Route path="/catalog/:parentId/:childId/:productId" element={<ProductDetailsPage />} />
+            <Route path="/catalog/:parentId/:subcategoryId/:productId" element={<ProductDetailsPage />} />
           </Routes>
         </Suspense>
       </Layout>

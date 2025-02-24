@@ -10,7 +10,6 @@ const ParentCategoryPage = () => {
   const {
     childCategories,
     parentCategoryName,
-    parentCategoryId,
     loading,
     error,
     fetchChildCategories,
@@ -34,7 +33,7 @@ const ParentCategoryPage = () => {
       <div>
         <ul className={styles.subCategories}>
           {childCategories.map((subcategory) => (
-            <SubCategory key={subcategory.id} name={subcategory.name} id={subcategory.id} parentId={parentCategoryId} />
+            <SubCategory key={subcategory.id} name={subcategory.name} id={subcategory.id} parentId={id} />
           ))}
         </ul>
       </div>
