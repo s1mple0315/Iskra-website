@@ -1,5 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+
+import styles from "./ProductDetailsPage.module.css";
 import useProductStore from "../../../config/api/Store/useProductStore/UseProductStore";
 import ProductPageSlider from "../../../entities/components/Slider/ProductPageSlider/ProductPageSlider";
 
@@ -12,9 +14,7 @@ const ProductDetailsPage = () => {
       fetchProduct(productId);
     }
   }, [productId, fetchProduct]);
-  console.log(product);
-  
-  
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -24,23 +24,14 @@ const ProductDetailsPage = () => {
   }
 
   return (
-    <div className="product-detail-page">
-      <h2>{product?.name || "Product Name"}</h2>
-      <p>{product?.description || "No description available."}</p>
-      <p>
-        <strong>Price: </strong>
-        {product?.price ? `$${product.price}` : "N/A"}
-      </p>
-      <p>
-        <strong>Stock: </strong>
-        {product?.stock || "Out of stock"}
-      </p>
-
-      <ProductPageSlider product={product} />
-
-      {product?.images && product.images.length > 0 && (
-        <ProductPageSlider product={product} />
-      )}
+    <div className={`${styles.productDetailsPage}`}>
+      <div className={styles.productDetailsContainer}>
+        <div className={`${styles.productDetailsContent} container`}>
+          {product?.images && product.images.length > 0 && (
+            <ProductPageSlider product={product} />
+          )}
+        </div>
+      </div>
     </div>
   );
 };

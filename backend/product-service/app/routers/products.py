@@ -16,17 +16,20 @@ router = APIRouter(prefix="/api/v1/products", tags=["Products"])
 UPLOAD_DIR = "static/images/products/"
 
 
-def compress_and_resize_image(file, size=(800, 800), quality=85):
+def compress_and_resize_image(file, max_size=(800, 800), quality=85):
     img = Image.open(file)
 
-    if img.mode == "RGBA":
+    if img.mode in ("P", "RGBA", "LA"):
         img = img.convert("RGB")
 
-    img.thumbnail(size)
-    output = io.BytesIO()
-    img.save(output, format="JPEG", quality=quality)
-    output.seek(0)
+    if img.size[0] > max_size[0] or img.size[1] > max_size[1]:
+        img.thumbnail(max_size, Image.Resampling.LANCZOS)
 
+    output = io.BytesIO()
+
+    img.save(output, format="JPEG", quality=quality)
+
+    output.seek(0)
     return output
 
 

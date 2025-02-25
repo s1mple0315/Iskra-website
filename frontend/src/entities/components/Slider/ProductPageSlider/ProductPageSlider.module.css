@@ -1,6 +1,6 @@
 .productPageSlider {
   display: flex;
-  gap: 20px;
+  gap: 128px;
 }
 
 .thumbnailList {
@@ -9,15 +9,23 @@
   gap: 10px;
   max-height: 400px;
   overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.thumbnailList::-webkit-scrollbar {
+  display: none;
 }
 
 .thumbnail {
   width: 100px;
+  padding: 2px 21px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
 .thumbnail.active {
-  border: 2px solid blue;
+  border: 2px solid #ff9414;
 }
 
 .mainDisplay {
@@ -33,19 +41,22 @@
 
 .prevButton,
 .nextButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
+  background-color: #f4f4f8;
   border: none;
   font-size: 24px;
   cursor: pointer;
 }
 
 .prevButton {
-  left: -40px;
+  left: -80px;
 }
 
 .nextButton {
-  right: -40px;
+  right: -80px;
 }

@@ -1,5 +1,8 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
+
 import styles from "./ProductPageSlider.module.css";
+import ChevronLeft from "../../../../shared/ui/icons/Chevron/ChevronDown/ChevronLeft";
+import ChevronRight from "../../../../shared/ui/icons/Chevron/ChevronDown/ChevronRight";
 
 const ProductPageSlider = ({ product }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -12,15 +15,13 @@ const ProductPageSlider = ({ product }) => {
     }
   }, [images, currentIndex]);
 
-  
-
   const handleThumbnailClick = (index) => {
     setCurrentIndex(index);
   };
 
   const handlePrevClick = () => {
-    setCurrentIndex((prevIndex) =>
-      (prevIndex - 1 + images.length) % images.length
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + images.length) % images.length
     );
   };
 
@@ -34,7 +35,7 @@ const ProductPageSlider = ({ product }) => {
         {images.map((image, index) => (
           <img
             key={index}
-            src={image} 
+            src={image}
             alt={`Thumbnail ${index + 1}`}
             className={
               index === currentIndex
@@ -48,15 +49,15 @@ const ProductPageSlider = ({ product }) => {
 
       <div className={styles.mainDisplay}>
         <button className={styles.prevButton} onClick={handlePrevClick}>
-          ←
+          <ChevronLeft />
         </button>
         <img
-          src={images[currentIndex]} 
+          src={images[currentIndex]}
           alt={`Image ${currentIndex + 1}`}
           className={styles.mainImage}
         />
         <button className={styles.nextButton} onClick={handleNextClick}>
-          →
+          <ChevronRight />
         </button>
       </div>
     </div>
