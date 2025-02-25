@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
 
-
 import AddCart from "../../../shared/ui/icons/product/addCart/AddCart";
 import styles from "./ProductCard.module.css";
 
-const ProductCard = ({ description, price, parentId, subcategoryId, productId, onClick }) => {
-  console.log(productId)
-
+const ProductCard = ({
+  description,
+  price,
+  parentId,
+  subcategoryId,
+  productId,
+  onClick,
+}) => {
   return (
     <div
       className={`${styles.productCard} d-flex flex-column justify-content-between`}
