@@ -1,33 +1,50 @@
 import styles from "./ProductDataDisplay.module.css";
 
-const ProductDataDisplay = () => {
+const ProductDataDisplay = ({ product }) => {
   return (
     <div className={styles.productDataDisplay}>
       <div>
-        <h3>Apple</h3> <span>#1648128</span>
+        <h3>{product?.brand || "Brand"}</h3> <span>#{product?._id || "ID"}</span>
       </div>
       <div>
-        <h3>Смартфон Apple iPhone 16 Plus 128 ГБ (Чёрный | Black)</h3>
+        <h3>{product?.name || "Product Name"}</h3>
       </div>
       <div>
         <p>Цвет</p>
         <div>
-          <div>grey</div>
-          <div>black</div>
-          <div>gold</div>
+          {product?.color ? (
+            Array.isArray(product.color) ? (
+              product.color.map((color, index) => (
+                <div key={index}>{color}</div>
+              ))
+            ) : (
+              <div>{product.color}</div>
+            )
+          ) : (
+            <div>No color available</div>
+          )}
         </div>
       </div>
       <div>
         <p>Память</p>
         <div>
-          <div>64GB</div>
-          <div>128GB</div>
-          <div>256GB</div>
+          {/* Assuming 'memory' in product is a string or array of memory options; adjust based on your data */}
+          {product?.memory ? (
+            Array.isArray(product.memory) ? (
+              product.memory.map((memory, index) => (
+                <div key={index}>{memory}</div>
+              ))
+            ) : (
+              <div>{product.memory}</div>
+            )
+          ) : (
+            <div>No memory available</div>
+          )}
         </div>
       </div>
       <hr />
-      <div>
-        <h3>price</h3>
+      <div className="d-flex justify-content-between">
+        <h3>{product?.price} $</h3>
         <button>Добавить в корзину</button>
       </div>
     </div>
