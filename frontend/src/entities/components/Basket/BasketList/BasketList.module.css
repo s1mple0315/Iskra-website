@@ -1,0 +1,16 @@
+.basketListAction {
+  padding: 10px 16px;
+}
+
+.checkMarkContainer > p {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18.62px;
+}
+
+.basketListAction > span {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18.62px;
+  opacity: 0.5;
+}

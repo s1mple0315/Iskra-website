@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Layout from "../../app/Layout";
 import Loading from "../../entities/components/Loading/Loading";
+import BasketPage from "../../pages/Basket/BasketPage";
 
 const MainPage = lazy(() => import("../../pages/Main/MainPage"));
 const Company = lazy(() => import("../../pages/AboutPage/Company"));
@@ -30,6 +31,8 @@ const AppRouter = () => {
             <Route path="/delivery" element={<DeliveryPage />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/regular" element={<RegularCustomersPage />} />
+
+            <Route path="/basket" element={<BasketPage />}/>
 
             {/* Blog Routes */}
             <Route path="/blog" element={<BlogListingPage />} />
