@@ -1,5 +1,17 @@
-.productListing{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 8px;
+.filterLayout {
+  display: flex;
+  gap: 20px;
+}
+
+.filtersSidebar {
+  width: 250px; /* Adjust as needed */
+  padding: 10px;
+  background: #f9f9f9;
+}
+
+.productListing {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px;
+  flex-grow: 1;
 }
