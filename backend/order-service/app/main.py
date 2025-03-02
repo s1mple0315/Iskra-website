@@ -1,8 +1,10 @@
 from fastapi import FastAPI, Depends
 from app.database import get_database, close_database_connection
+from app.routers import orders
 
 app = FastAPI()
 
+app.include_router(orders.router)
 
 @app.on_event("startup")
 async def startup_event():

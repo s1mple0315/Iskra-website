@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 const useBasketStore = create((set, get) => ({
-  items: [], // Array to store basket items { id, name, price, quantity }
+  items: [],
 
   addItem: (item) => {
     set((state) => {
@@ -43,6 +43,43 @@ const useBasketStore = create((set, get) => ({
     return get().items
       .reduce((total, item) => total + item.price * item.quantity, 0)
       .toFixed(2);
+  },
+
+  checkout: async (userId, shippingAddress) => {
+    const items = get().items;
+    if (items.length === 0) {
+      throw new Error('Basket is empty');
+    }
+
+    const totalAmount = parseFloat(get().getTotalPrice());
+    const orderData = {
+      user_id: userId,
+      items: items.map((item) => ({
+        product_id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+      total_amount: totalAmount,
+      shipping_address: shippingAddress,
+    };
+
+    const response = await fetch('http://localhost:8001/api/v1/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Failed to create order');
+    }
+
+    const order = await response.json();
+    set({ items: [] }); 
+    return order; 
   },
 }));
 
