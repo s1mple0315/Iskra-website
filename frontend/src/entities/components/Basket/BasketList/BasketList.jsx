@@ -2,23 +2,23 @@ import { useState } from "react";
 import Checkmark from "../../../../shared/ui/checkmark/checkmark";
 import styles from "./BasketList.module.css";
 import BasketItem from "../BasketItem/BasketItem";
-import useBasketStore from "../../../../config/api/Store/useBasketStore/useBasketStore"; // Adjust path to your store
+import useBasketStore from "../../../../config/api/Store/useBasketStore/useBasketStore";
 
 const BasketList = () => {
   const { items, removeItem } = useBasketStore();
-  const [selectedItems, setSelectedItems] = useState([]); // Track selected item IDs
+  const [selectedItems, setSelectedItems] = useState([]);
 
   const handleSelectAll = () => {
     if (selectedItems.length === items.length) {
-      setSelectedItems([]); // Deselect all
+      setSelectedItems([]);
     } else {
-      setSelectedItems(items.map((item) => item.id)); // Select all
+      setSelectedItems(items.map((item) => item.id));
     }
   };
 
   const handleDeleteSelected = () => {
     selectedItems.forEach((id) => removeItem(id));
-    setSelectedItems([]); // Clear selection after deletion
+    setSelectedItems([]);
   };
 
   const toggleItemSelection = (id) => {
@@ -37,7 +37,9 @@ const BasketList = () => {
             className={`${styles.checkMarkContainer} d-flex gap-3 align-items-center`}
           >
             <Checkmark
-              checked={selectedItems.length === items.length && items.length > 0}
+              checked={
+                selectedItems.length === items.length && items.length > 0
+              }
               onChange={handleSelectAll}
             />
             <p>Выбрать все</p>

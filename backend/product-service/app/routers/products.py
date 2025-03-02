@@ -402,6 +402,11 @@ async def filter_products(
     brand: Optional[str] = None,
     min_price: Optional[float] = None,
     max_price: Optional[float] = None,
+    series: Optional[str] = None,
+    memory: Optional[str] = None,
+    sim_card: Optional[str] = None,
+    processor_type: Optional[str] = None,
+    color: Optional[str] = None,
     sort_by: Optional[str] = "price",
     order: Optional[str] = "asc",
     page: int = 1,
@@ -412,6 +417,16 @@ async def filter_products(
 
     if brand:
         query["brand"] = brand
+    if series:
+        query["series"] = series
+    if memory:
+        query["memory"] = memory
+    if sim_card:
+        query["sim_card"] = sim_card
+    if processor_type:
+        query["processor_type"] = processor_type
+    if color:
+        query["color"] = color
     if min_price is not None or max_price is not None:
         query["price"] = {}
         if min_price is not None:
@@ -454,7 +469,6 @@ async def filter_products(
     await redis.setex(cache_key, 60, json.dumps(result, default=str))
 
     return result
-
 
 @router.get("/autocomplete", response_model=List[str])
 async def autocomplete_products(query: str = Query(..., min_length=1, max_length=50)):

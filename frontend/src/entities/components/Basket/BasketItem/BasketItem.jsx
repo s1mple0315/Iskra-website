@@ -26,14 +26,14 @@ const BasketItem = ({ item, isSelected, onToggleSelection }) => {
         />
       </div>
       <div className={styles.basketItemImg}>
-        <img src={item.images?.[0] || ""} alt={item.name} /> {/* Use first image */}
+        <img src={item.images?.[0] || ""} alt={item.name} /> 
       </div>
       <div className={`${styles.basketItemInfo} d-flex flex-column`}>
         <div className={styles.basketItemDescription}>
           <p>{item.name}</p>
         </div>
         <div className={styles.basketItemId}>
-          <span>#{item.id}</span> {/* Assuming id is unique */}
+          <span>#{item.id}</span> 
         </div>
       </div>
       <div className={styles.basketItemQuantity}>
@@ -41,7 +41,7 @@ const BasketItem = ({ item, isSelected, onToggleSelection }) => {
           initialValue={item.quantity}
           onChange={handleQuantityChange}
           minValue={1}
-          maxValue={15} // Adjust based on stock if available
+          maxValue={15} 
         />
       </div>
       <div className={styles.basketItemPrice}>

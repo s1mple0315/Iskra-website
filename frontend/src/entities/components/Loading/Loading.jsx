@@ -1,6 +1,3 @@
-
-import React from 'react'
-
 const Loading = () => {
   return (
     <div>
@@ -10,15 +7,6 @@ const Loading = () => {
 }
 
 export default Loading
-
-
-
-
-
-
-
-
-
 // const Loader = () => {
 //   return (
 //     <StyledWrapper>
