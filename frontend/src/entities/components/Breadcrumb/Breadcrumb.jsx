@@ -6,39 +6,36 @@ import styles from './Breadcrumb.module.css';
 const fetchCategoryNameById = async (categoryId) => {
   try {
     const response = await axios.get(`http://localhost:8002/api/v1/categories/${categoryId}`);
-    return response.data.name; // Assuming the API returns the category name
+    return response.data.name;
   } catch (err) {
     console.error('Failed to fetch category name', err);
-    return categoryId; // Return ID as fallback if fetch fails
+    return categoryId; 
   }
 };
 
-// Function to fetch product name based on ID
 const fetchProductNameById = async (productId) => {
   try {
     const response = await axios.get(`http://localhost:8002/api/v1/products/${productId}`);
-    return response.data.name; // Assuming the API returns the product name
+    return response.data.name; 
   } catch (err) {
     console.error('Failed to fetch product name', err);
-    return productId; // Return ID as fallback if fetch fails
+    return productId; 
   }
 };
 
 const Breadcrumb = () => {
   const location = useLocation();
-  const { parentId, subcategoryId, productId } = useParams(); // Get dynamic params
+  const { parentId, subcategoryId, productId } = useParams(); 
   const pathnames = location.pathname.split('/').filter(x => x);
 
   const [breadcrumbNames, setBreadcrumbNames] = useState({});
   const [loading, setLoading] = useState(true);
 
-  // Fetch category and product names based on the URL parameters
   useEffect(() => {
     const fetchNames = async () => {
       setLoading(true);
       const names = {};
 
-      // Fetch category names if parentId or subcategoryId is available
       if (parentId) {
         names[parentId] = await fetchCategoryNameById(parentId);
       }
@@ -70,10 +67,8 @@ const Breadcrumb = () => {
           const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
           const isLast = index === pathnames.length - 1;
 
-          // Use a unique key combining index and name
           const uniqueKey = `${index}-${name}`;
 
-          // Replace IDs with dynamic names
           const displayName = breadcrumbNames[name] || name;
 
           return (

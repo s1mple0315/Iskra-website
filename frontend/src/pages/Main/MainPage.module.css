@@ -1,0 +1,21 @@
+.mainPage {
+  padding: 20px;
+  background: #f9f9f9;
+}
+
+.bannerSection,
+.catalogSection,
+.brandLogosSection,
+.featuredProductsSection,
+.newProductsSection,
+.blogSection {
+  margin-bottom: 40px;
+}
+
+.catalogSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+  justify-content: center;
+  padding: 20px;
+}

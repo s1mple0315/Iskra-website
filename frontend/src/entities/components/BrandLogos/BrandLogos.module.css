@@ -1,0 +1,24 @@
+.brandLogosSection {
+  padding: 20px 0;
+  background: #fff;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.brandLogosContainer {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.brandLogo {
+  width: 100px;
+  height: auto;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.brandLogo:hover {
+  opacity: 1;
+}

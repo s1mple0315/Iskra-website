@@ -7,7 +7,7 @@ const ParentCategory = () => {
 
   useEffect(() => {
     fetchParentCategories();
-  }, []);
+  }, [fetchParentCategories]);
 
   return (
     <>
