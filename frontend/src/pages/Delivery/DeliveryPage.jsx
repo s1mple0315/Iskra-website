@@ -39,7 +39,6 @@ const DeliveryPage = () => {
         </p>
       </div>
 
-      <StaticServices />
     </div>
   );
 };

@@ -16,7 +16,6 @@ const Contacts = () => {
 
       <div className={`${styles.mapContainer} mb-5`}>Map will be here</div>
 
-      <StaticServices />
     </div>
   );
 };

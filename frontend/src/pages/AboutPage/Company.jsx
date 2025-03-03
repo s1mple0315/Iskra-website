@@ -40,7 +40,6 @@ const Company = () => {
         </p>
       </div>
 
-      <StaticServices />
     </main>
   );
 };

@@ -47,7 +47,6 @@ const GuaranteePage = () => {
         </p>
       </div>
 
-      <StaticServices />
     </div>
   );
 };

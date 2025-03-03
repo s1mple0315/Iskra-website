@@ -42,7 +42,6 @@ const RegularCustomersPage = () => {
         </p>
       </div>
 
-      <StaticServices />
     </div>
   );
 };
