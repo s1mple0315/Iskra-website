@@ -5,14 +5,15 @@ import ProductCard from "../../../entities/components/ProductCard/ProductCard";
 import styles from "./ProductListingPage.module.css";
 import FilterUpperBlock from "../../../entities/components/Filters/FilterUpperBlock/FilterUpperBlock";
 import Pagination from "../../../entities/components/Pagination/Pagination";
-import FiltersLeftBlock from "../../../entities/components/Filters/FiltersLeftBlock/FiltersLeftBlock"; // Import FiltersLeftBlock
-import useFilterStore from "../../../config/api/Store/useFilterStore/useFilterStore"; // Adjust path
+import FiltersLeftBlock from "../../../entities/components/Filters/FiltersLeftBlock/FiltersLeftBlock";
+import useFilterStore from "../../../config/api/Store/useFilterStore/useFilterStore";
 
 const ProductListingPage = () => {
   const { subcategoryId, parentId } = useParams();
-  const { products, loading, error, fetchProducts, pagination } = useProductStore();
+  const { products, loading, error, fetchProducts, pagination } =
+    useProductStore();
   const [currentPage, setCurrentPage] = useState(pagination.page);
-  const [showFilters, setShowFilters] = useState(false); // State to toggle filters
+  const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,15 +29,13 @@ const ProductListingPage = () => {
   const handleProductClick = (productId) => {
     console.log("Clicked Product ID:", productId);
     if (productId) {
-      // Assuming fetchProduct and navigate are part of useProductStore
-      fetchProduct(productId);
+      fetchProducts(productId);
       navigate(`/catalog/${parentId}/${subcategoryId}/${productId}`);
     } else {
       console.error("Product ID is invalid");
     }
   };
 
-  // Fetch filtered products when filters change
   useEffect(() => {
     const fetchFilteredProducts = async () => {
       const { getFilterQuery } = useFilterStore();
@@ -47,9 +46,7 @@ const ProductListingPage = () => {
         );
         if (!response.ok) throw new Error("Failed to fetch filtered products");
         const data = await response.json();
-        // Update useProductStore products (if possible) or handle locally
-        // For now, assuming fetchProducts updates the store
-        fetchProducts(subcategoryId, currentPage, pagination.limit); // Refresh with filters
+        fetchProducts(subcategoryId, currentPage, pagination.limit);
       } catch (err) {
         console.error(err.message);
       }
@@ -70,7 +67,7 @@ const ProductListingPage = () => {
       <h2>Products</h2>
       <FilterUpperBlock
         total={pagination.total_count}
-        onFilterToggle={() => setShowFilters(!showFilters)} // Toggle filter visibility
+        onFilterToggle={() => setShowFilters(!showFilters)}
       />
       <div className={styles.filterLayout}>
         {showFilters && (

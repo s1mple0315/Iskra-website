@@ -4,9 +4,10 @@
 }
 
 .filtersSidebar {
-  width: 250px; /* Adjust as needed */
-  padding: 10px;
-  background: #f9f9f9;
+  width: 250px;
+  height: fit-content;
+  border-radius: 8px; 
+  background: #fff;
 }
 
 .productListing {

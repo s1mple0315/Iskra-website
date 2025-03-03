@@ -6,7 +6,7 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def startup_event():
-    await connect_redis()  # ✅ Initialize Redis on startup
+    await connect_redis() 
 
 app.include_router(auth.router, prefix="/api/v1/auth")
 

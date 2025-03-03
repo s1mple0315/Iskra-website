@@ -1,14 +1,23 @@
 .subCategory {
-  display: flex;
-  flex-direction: column;
   background-color: #fff;
-  padding: 32px;
+  padding: 32px 68px 49px 46px; 
   border-radius: 8px;
   width: 314px;
   height: 266px;
   cursor: pointer;
 }
 
-.subCategory h3{
-    
+.subCategory > a{
+  text-decoration: none;
+  color: #272525;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.subCategory > a > h3{
+  font-size: 18px;
+  line-height: 21.6px;
+  font-weight: 700;
+  margin: 0;
 }

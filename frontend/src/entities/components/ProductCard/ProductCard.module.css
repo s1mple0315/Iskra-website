@@ -1,14 +1,18 @@
 .productCard {
   width: 314px;
-  /* height: auto; */
   border-radius: 8px;
   background-color: #fff;
+}
+
+.productCard > a {
+  text-decoration: none;
+  color: #272525;
 }
 
 .productImageSlider {
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid #272525;
+  border-bottom: 1px solid #1F2029;
 }
 
 .productImageSlider img {
@@ -56,7 +60,7 @@
 .addCartButton {
   display: flex;
   justify-content: center;
-  align-items: center       ;
+  align-items: center;
   width: 58px;
   height: 58px;
   border-radius: 8px;

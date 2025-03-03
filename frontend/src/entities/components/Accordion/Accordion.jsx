@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import styles from "./Accordion.module.css";
 
 const Accordion = ({ title, children }) => {
