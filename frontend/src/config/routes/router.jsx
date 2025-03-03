@@ -32,6 +32,7 @@ const AppRouter = () => {
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/regular" element={<RegularCustomersPage />} />
 
+            {/* Basket Routes */}
             <Route path="/basket" element={<BasketPage />}/>
 
             {/* Blog Routes */}

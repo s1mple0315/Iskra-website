@@ -13,7 +13,8 @@ import HeaderTelegram from "../../../shared/ui/icons/Layout/Header/Social/Telegr
 import HeaderWhatsapp from "../../../shared/ui/icons/Layout/Header/Social/Whatsapp/HeaderWhatsapp";
 
 const Header = () => {
-  const { parentCategories, loading, error, fetchParentCategories } = useCategoryStore();
+  const { parentCategories, loading, error, fetchParentCategories } =
+    useCategoryStore();
 
   // Fetch parent categories when the component mounts
   useEffect(() => {
@@ -77,7 +78,9 @@ const Header = () => {
             </div>
           </div>
 
-          <div className={`${styles.headerTopRight} d-flex align-items-center gap-5`}>
+          <div
+            className={`${styles.headerTopRight} d-flex align-items-center gap-5`}
+          >
             <div className="d-flex gap-2">
               <HeaderTelegram />
               <HeaderWhatsapp />
@@ -105,7 +108,9 @@ const Header = () => {
           <div
             className={`${styles.headerMiddleRight} d-flex gap-3 align-items-center`}
           >
-            <HeaderBasket />
+            <Link to={"/basket"}>
+              <HeaderBasket />
+            </Link>
             <HeaderProfile />
           </div>
         </div>

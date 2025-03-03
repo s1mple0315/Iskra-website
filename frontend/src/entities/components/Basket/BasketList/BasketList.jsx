@@ -8,11 +8,14 @@ const BasketList = () => {
   const { items, removeItem } = useBasketStore();
   const [selectedItems, setSelectedItems] = useState([]);
 
+  // Debug: Log items to confirm data
+  console.log("Items in BasketList:", items);
+
   const handleSelectAll = () => {
-    if (selectedItems.length === items.length) {
+    if (selectedItems.length === (items?.length || 0)) {
       setSelectedItems([]);
     } else {
-      setSelectedItems(items.map((item) => item.id));
+      setSelectedItems(items?.map((item) => item.id) || []);
     }
   };
 
@@ -29,7 +32,7 @@ const BasketList = () => {
 
   return (
     <div className={styles.basketList}>
-      {items.length > 0 && (
+      {items && Array.isArray(items) && items.length > 0 && (
         <div
           className={`${styles.basketListAction} d-flex align-items-center justify-content-between`}
         >
@@ -53,9 +56,9 @@ const BasketList = () => {
         </div>
       )}
       <div className={`${styles.basketListItems} d-flex flex-column gap-4`}>
-        {items.length === 0 ? (
+        {items && Array.isArray(items) && items.length === 0 ? (
           <p>Корзина пуста</p>
-        ) : (
+        ) : items && Array.isArray(items) ? (
           items.map((item) => (
             <BasketItem
               key={item.id}
@@ -64,6 +67,8 @@ const BasketList = () => {
               onToggleSelection={toggleItemSelection}
             />
           ))
+        ) : (
+          <p>Ошибка: Данные корзины недоступны</p>
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 const useBasketStore = create((set, get) => ({
   items: [],
@@ -13,6 +13,8 @@ const useBasketStore = create((set, get) => ({
           ),
         };
       }
+      console.log(item);
+
       return { items: [...state.items, { ...item, quantity: 1 }] };
     });
   },
@@ -40,15 +42,15 @@ const useBasketStore = create((set, get) => ({
   },
 
   getTotalPrice: () => {
-    return get().items
-      .reduce((total, item) => total + item.price * item.quantity, 0)
+    return get()
+      .items.reduce((total, item) => total + item.price * item.quantity, 0)
       .toFixed(2);
   },
 
   checkout: async (userId, shippingAddress) => {
     const items = get().items;
     if (items.length === 0) {
-      throw new Error('Basket is empty');
+      throw new Error("Basket is empty");
     }
 
     const totalAmount = parseFloat(get().getTotalPrice());
@@ -64,22 +66,22 @@ const useBasketStore = create((set, get) => ({
       shipping_address: shippingAddress,
     };
 
-    const response = await fetch('http://localhost:8001/api/v1/orders', {
-      method: 'POST',
+    const response = await fetch("http://localhost:8004/api/v1/orders", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(orderData),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.detail || 'Failed to create order');
+      throw new Error(errorData.detail || "Failed to create order");
     }
 
     const order = await response.json();
-    set({ items: [] }); 
-    return order; 
+    set({ items: [] });
+    return order;
   },
 }));
 
