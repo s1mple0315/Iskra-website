@@ -380,10 +380,7 @@ async def search_products(query: str, page: int = 1, limit: int = 10):
     skip = (page - 1) * limit
 
     product_cursor = (
-        db.products.find(
-            {"$text": {"$search": query}}, {"score": {"$meta": "textScore"}}
-        )
-        .sort([("score", {"$meta": "textScore"})])
+        db.products.find({"name": {"$regex": query, "$options": "i"}})
         .skip(skip)
         .limit(limit)
     )
@@ -470,21 +467,17 @@ async def filter_products(
 
     return result
 
+
 @router.get("/autocomplete", response_model=List[str])
 async def autocomplete_products(query: str = Query(..., min_length=1, max_length=50)):
-    """Returns autocomplete suggestions for product names using MongoDB text search."""
-
-    cache_key = f"autocomplete:{query}"
+    """Returns autocomplete suggestions for product names using MongoDB regex."""
+    cache_key = f"autocomplete:{query.lower()}"
     cached_data = await redis.get(cache_key)
     if cached_data:
         return json.loads(cached_data)
 
-    cursor = (
-        db.products.find(
-            {"$text": {"$search": query}}, {"score": {"$meta": "textScore"}}
-        )
-        .sort([("score", {"$meta": "textScore"})])
-        .limit(5)
+    cursor = db.products.find({"name": {"$regex": f"^{query}", "$options": "i"}}).limit(
+        5
     )
 
     suggestions = [product["name"] async for product in cursor]

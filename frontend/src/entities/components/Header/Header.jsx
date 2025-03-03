@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useCategoryStore from "../../../config/api/Store/useCategoryStore/UseCategoryStore";
-
 import styles from "./Header.module.css";
 import MapPoint from "../../../shared/ui/icons/Layout/MapPoint/MapPoint";
 import HeaderAppLogo from "../../../shared/ui/icons/Layout/Header/AppLogo/HeaderAppLogo";
@@ -15,8 +14,8 @@ import HeaderWhatsapp from "../../../shared/ui/icons/Layout/Header/Social/Whatsa
 const Header = () => {
   const { parentCategories, loading, error, fetchParentCategories } =
     useCategoryStore();
+  const navigate = useNavigate();
 
-  // Fetch parent categories when the component mounts
   useEffect(() => {
     fetchParentCategories();
   }, [fetchParentCategories]);
@@ -29,8 +28,17 @@ const Header = () => {
     return <div>{error}</div>;
   }
 
+  const handleSearchResults = (results) => {
+    if (results.length > 0) {
+      const product = results[0];
+      navigate(`/catalog/${product.category_id}/${product._id}`);
+    } else {
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
   return (
-    <div className={`${styles.header}  d-flex flex-column`}>
+    <div className={`${styles.header} d-flex flex-column`}>
       <header className="container">
         <div
           className={`${styles.headerTop} d-flex align-items-center justify-content-between`}
@@ -77,7 +85,6 @@ const Header = () => {
               </ul>
             </div>
           </div>
-
           <div
             className={`${styles.headerTopRight} d-flex align-items-center gap-5`}
           >
@@ -92,7 +99,7 @@ const Header = () => {
           className={`${styles.headerMiddle} d-flex justify-content-between`}
         >
           <div
-            className={`${styles.headerMiddleLeft} d-flex  align-items-center gap-3`}
+            className={`${styles.headerMiddleLeft} d-flex align-items-center gap-3`}
           >
             <div>
               <HeaderAppLogo />
@@ -101,10 +108,9 @@ const Header = () => {
               <BurgerMenu />
             </div>
             <div className={styles.searchBarContainer}>
-              <SearchBar />
+              <SearchBar onSearchResults={handleSearchResults} />
             </div>
           </div>
-
           <div
             className={`${styles.headerMiddleRight} d-flex gap-3 align-items-center`}
           >

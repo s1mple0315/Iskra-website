@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './Breadcrumb.module.css';
 
-// Function to fetch category names based on ID
 const fetchCategoryNameById = async (categoryId) => {
   try {
     const response = await axios.get(`http://localhost:8002/api/v1/categories/${categoryId}`);
@@ -37,20 +36,17 @@ const Breadcrumb = () => {
   useEffect(() => {
     const fetchNames = async () => {
       setLoading(true);
-
       const names = {};
 
       // Fetch category names if parentId or subcategoryId is available
       if (parentId) {
-        names.parentCategory = await fetchCategoryNameById(parentId);
+        names[parentId] = await fetchCategoryNameById(parentId);
       }
       if (subcategoryId) {
-        names.subcategory = await fetchCategoryNameById(subcategoryId);
+        names[subcategoryId] = await fetchCategoryNameById(subcategoryId);
       }
-
-      // Fetch product name if productId is available
       if (productId) {
-        names.product = await fetchProductNameById(productId);
+        names[productId] = await fetchProductNameById(productId);
       }
 
       setBreadcrumbNames(names);
@@ -58,7 +54,7 @@ const Breadcrumb = () => {
     };
 
     fetchNames();
-  }, [parentId, subcategoryId, productId]); // Re-run when any of the params change
+  }, [parentId, subcategoryId, productId]); 
 
   if (loading) {
     return <div>Loading...</div>;
@@ -67,18 +63,21 @@ const Breadcrumb = () => {
   return (
     <nav aria-label="breadcrumb" className={styles.breadcrumbNav}>
       <ol className={styles.breadcrumbList}>
-        <li className={`${styles.breadcrumbItem} ${styles.homeItem}`}>
+        <li key="home" className={`${styles.breadcrumbItem} ${styles.homeItem}`}>
           <a href="/" className={styles.breadcrumbLink}>Home</a>
         </li>
         {pathnames.map((name, index) => {
           const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
           const isLast = index === pathnames.length - 1;
 
+          // Use a unique key combining index and name
+          const uniqueKey = `${index}-${name}`;
+
           // Replace IDs with dynamic names
-          const displayName = isNaN(name) ? name : breadcrumbNames[name] || name;
+          const displayName = breadcrumbNames[name] || name;
 
           return (
-            <li key={name} className={`${styles.breadcrumbItem} ${isLast ? styles.activeItem : ''}`} aria-current={isLast ? 'page' : undefined}>
+            <li key={uniqueKey} className={`${styles.breadcrumbItem} ${isLast ? styles.activeItem : ''}`} aria-current={isLast ? 'page' : undefined}>
               {isLast ? (
                 displayName.charAt(0).toUpperCase() + displayName.slice(1)
               ) : (
