@@ -1,0 +1,91 @@
+.basketSummary {
+    max-width: 400px; /* Adjust based on your design */
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .summaryHeader {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .summaryHeader h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .totalPrice {
+    font-size: 32px;
+    font-weight: bold;
+    color: #f5a623;
+    margin: 0;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin: 10px 0;
+  }
+  
+  .checkoutButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #f5a623; /* Orange button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+  
+  .checkoutButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .promoSection {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .promoInput {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .applyButton {
+    padding: 10px 20px;
+    background-color: #333; /* Black button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .applyButton:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+  }
+  
+  .shippingSection {
+    margin-top: 15px;
+  }
+  
+  .shippingInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }

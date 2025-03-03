@@ -28,7 +28,7 @@ const BasketItem = ({ item, isSelected, onToggleSelection }) => {
       <div className={styles.basketItemImg}>
         <img src={item.images?.[0] || ""} alt={item.name} /> 
       </div>
-      <div className={`${styles.basketItemInfo} d-flex flex-column`}>
+      <div className={`${styles.basketItemInfo} d-flex flex-column justify-content-between`}>
         <div className={styles.basketItemDescription}>
           <p>{item.name}</p>
         </div>

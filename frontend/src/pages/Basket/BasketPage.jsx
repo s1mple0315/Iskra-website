@@ -6,11 +6,11 @@ const BasketPage = () => {
   return (
     <div className={styles.basket}>
       <h1>Корзина</h1>
-      <div className="d-flex justify-content-between">
-        <div>
+      <div className="d-flex justify-content-between gap-4">
+        <div className={styles.basketItems}>
           <BasketList />
         </div>
-        <div>
+        <div className={styles.basketSummary}>
           <BasketSummary /> 
         </div>
       </div>
