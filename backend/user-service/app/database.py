@@ -5,12 +5,10 @@ import os
 
 load_dotenv()
 
-# Load environment variables
 MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = os.getenv("DB_NAME")
 REDIS_URI = os.getenv("REDIS_URL")
 
-# Initialize MongoDB client
 client = AsyncIOMotorClient(MONGO_URI)
 db = client[DB_NAME]
 

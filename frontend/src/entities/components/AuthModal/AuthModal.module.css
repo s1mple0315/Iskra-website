@@ -1,0 +1,74 @@
+.otpContainer {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.otpContainer h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.inputField {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.getCodeButton {
+  width: 100%;
+  padding: 12px;
+  background-color: #f5a623; /* Orange from design */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.getCodeButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.getCodeButton:hover:not(:disabled) {
+  background-color: #e5941a;
+}
+
+.recaptcha {
+  margin: 10px 0;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.socialLogin {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.socialIcon {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.instructions {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
