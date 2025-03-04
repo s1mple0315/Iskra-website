@@ -1,46 +1,68 @@
-import { useState } from "react";
-import {
-  getAuth,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from "firebase/auth";
-import { initializeApp } from "firebase/app";
+import { useState, useEffect } from "react";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { initializeApp, getApps } from "firebase/app";
 import axios from "axios";
 import styles from "./AuthModal.module.css";
 
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-auth-domain",
-  projectId: "your-project-id",
+  apiKey: "AIzaSyDA01TQxy3WA-izrSJsQASYwqSBGCxmN0Y",
+  authDomain: "iskra-e-commerce.firebaseapp.com",
+  projectId: "iskra-e-commerce",
+  storageBucket: "iskra-e-commerce.appspot.com",
+  messagingSenderId: "1046589607815",
+  appId: "1:1046589607815:web:78721fb448d819fa080d22",
+  measurementId: "G-1CV8RK2EDH",
 };
 
-const app = initializeApp(firebaseConfig);
+// Инициализируем Firebase (убираем дублирование)
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const OTPLogin = () => {
-  const [phoneOrEmail, setPhoneOrEmail] = useState("");
+const AuthModal = ({ isOpen, onClose }) => {
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [code, setCode] = useState("");
   const [confirmation, setConfirmation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth, // <-- Передаём auth напрямую
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: (response) => {
+            console.log("reCAPTCHA verified:", response);
+          },
+          "expired-callback": () => {
+            setError("reCAPTCHA expired, please refresh the page.");
+          },
+        }
+      );
+      window.recaptchaVerifier.render();
+    }
+  }, []);
+
+  if (!isOpen) return null;
+
   const sendOTP = async () => {
     setLoading(true);
     setError(null);
+
     try {
-      const recaptcha = new RecaptchaVerifier("recaptcha-container", {}, auth);
-      const phoneNumber = phoneOrEmail.startsWith("+")
-        ? phoneOrEmail
-        : `+${phoneOrEmail}`;
-      const confirmationResult = await signInWithPhoneNumber(
-        auth,
-        phoneNumber,
-        recaptcha
-      );
+      if (!phoneNumber.match(/^\+\d{10,15}$/)) {
+        throw new Error("Введите корректный номер в формате +1234567890");
+      }
+
+      const appVerifier = window.recaptchaVerifier;
+      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+
       setConfirmation(confirmationResult);
     } catch (err) {
-      setError("Failed to send OTP: " + err.message);
+      setError("Ошибка при отправке OTP: " + err.message);
+      console.error("OTP Error:", err);
     } finally {
       setLoading(false);
     }
@@ -49,76 +71,84 @@ const OTPLogin = () => {
   const verifyOTP = async () => {
     setLoading(true);
     setError(null);
+
     try {
+      if (!confirmation) {
+        throw new Error("Код не отправлен. Попробуйте снова.");
+      }
+
       const credential = await confirmation.confirm(code);
-      setUser(credential.user); 
-      const response = await axios.post("/api/v1/auth/register", {
-        phoneNumber: phoneOrEmail.startsWith("+")
-          ? phoneOrEmail
-          : `+${phoneOrEmail}`,
-        full_name: "User Name", 
+      setUser(credential.user);
+
+      // Регистрация в вашем API
+      const response = await axios.post("http://localhost:8001/api/v1/auth/register", {
+        phoneNumber: phoneNumber,
+        full_name: "User Name",
         role: "user",
       });
+
       localStorage.setItem("token", response.data.token);
       console.log("User registered:", response.data);
+      onClose();
     } catch (err) {
-      setError("Invalid OTP or registration failed: " + err.message);
+      setError("Ошибка проверки OTP: " + err.message);
+      console.error("Verification Error:", err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={styles.otpContainer}>
-      <h2>Войти или зарегистрироваться</h2>
-      <input
-        type="text"
-        value={phoneOrEmail}
-        onChange={(e) => setPhoneOrEmail(e.target.value)}
-        placeholder="Телефон или E-mail"
-        className={styles.inputField}
-        disabled={loading}
-      />
-      {!confirmation && (
-        <button
-          onClick={sendOTP}
-          className={styles.getCodeButton}
-          disabled={loading || !phoneOrEmail}
-        >
-          {loading ? "Отправка..." : "Получить код"}
-        </button>
-      )}
-      {confirmation && (
-        <>
-          <input
-            type="text"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder="Введите код"
-            className={styles.inputField}
-            disabled={loading}
-          />
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <h2>Войти или зарегистрироваться</h2>
+        <input
+          type="text"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          placeholder="Введите номер (например, +1234567890)"
+          className={styles.inputField}
+          disabled={loading}
+        />
+        {!confirmation && (
           <button
-            onClick={verifyOTP}
+            onClick={sendOTP}
             className={styles.getCodeButton}
-            disabled={loading || !code}
+            disabled={loading || !phoneNumber}
           >
-            {loading ? "Проверка..." : "Подтвердить"}
+            {loading ? "Отправка..." : "Получить код"}
           </button>
-        </>
-      )}
-      <div id="recaptcha-container" className={styles.recaptcha}></div>
-      {error && <p className={styles.error}>{error}</p>}
-      <div className={styles.socialLogin}>
-        {/* <VKIcon className={styles.socialIcon} /> */}
-        {/* <GoogleIcon className={styles.socialIcon} /> */}
+        )}
+        {confirmation && (
+          <>
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="Введите код"
+              className={styles.inputField}
+              disabled={loading}
+            />
+            <button
+              onClick={verifyOTP}
+              className={styles.getCodeButton}
+              disabled={loading || !code}
+            >
+              {loading ? "Проверка..." : "Подтвердить"}
+            </button>
+          </>
+        )}
+        <div id="recaptcha-container" className={styles.recaptcha}></div>
+        {error && <p className={styles.error}>{error}</p>}
+        <p className={styles.instructions}>
+          Нажимая "Получить код", вы соглашаетесь с условиями использования.
+        </p>
+        <button className={styles.closeButton} onClick={onClose}>
+          ×
+        </button>
       </div>
-      <p className={styles.instructions}>
-        Нажимая кнопку &quot;Получить код&quot;, вы соглашаетесь с условиями использования
-        и политикой конфиденциальности
-      </p>
     </div>
   );
 };
 
-export default OTPLogin;
+export default AuthModal;
