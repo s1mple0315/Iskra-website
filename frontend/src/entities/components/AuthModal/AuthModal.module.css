@@ -59,19 +59,14 @@
 
 .recaptcha {
   margin: 10px 0;
+  min-height: 80px;
+  display: block;
 }
 
 .error {
   color: red;
   font-size: 14px;
   margin-bottom: 10px;
-}
-
-.socialLogin {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
 }
 
 .instructions {

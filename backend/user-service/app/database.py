@@ -14,11 +14,15 @@ db = client[DB_NAME]
 
 redis = None
 
+
 async def connect_redis():
-    """Connects to Redis"""
+    """Ensures Redis connection is active"""
     global redis
-    redis = await aioredis.from_url(REDIS_URI, decode_responses=True)
-    print("✅ Redis Connected Successfully")
+    if redis is None:
+        redis = await aioredis.from_url(REDIS_URI, decode_responses=True)
+        print("✅ Redis Connected Successfully")
+    return redis
+
 
 def get_database():
     return db

@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import {
+  getAuth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "firebase/auth";
 import { initializeApp, getApps } from "firebase/app";
 import axios from "axios";
 import styles from "./AuthModal.module.css";
@@ -14,9 +18,10 @@ const firebaseConfig = {
   measurementId: "G-1CV8RK2EDH",
 };
 
-// Инициализируем Firebase (убираем дублирование)
-const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const app = getApps().length > 0 ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+auth.settings.appVerificationDisabledForTesting = true;
 
 const AuthModal = ({ isOpen, onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -57,7 +62,11 @@ const AuthModal = ({ isOpen, onClose }) => {
       }
 
       const appVerifier = window.recaptchaVerifier;
-      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        phoneNumber,
+        appVerifier
+      );
 
       setConfirmation(confirmationResult);
     } catch (err) {
@@ -81,13 +90,21 @@ const AuthModal = ({ isOpen, onClose }) => {
       setUser(credential.user);
 
       // Регистрация в вашем API
-      const response = await axios.post("http://localhost:8001/api/v1/auth/register", {
-        phoneNumber: phoneNumber,
-        full_name: "User Name",
-        role: "user",
-      });
+      const response = await axios.post(
+        "http://localhost:8001/api/v1/auth/register",
+        {
+          phoneNumber: phoneNumber,
+          full_name: "User Name",
+          role: "user",
+        }
+      );
+      if (response.data && response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        console.log("✅ Token saved:", response.data.token);
+      } else {
+        console.error("❌ No token received from backend:", response.data);
+      }
 
-      localStorage.setItem("token", response.data.token);
       console.log("User registered:", response.data);
       onClose();
     } catch (err) {

@@ -7,18 +7,19 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173/", "http://localhost:5173", "http://localhost:3000", "http://localhost:3000/", "http://localhost:4173", "http://localhost:4173/"],
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
+
+app.include_router(auth.router)
 
 
 @app.on_event("startup")
 async def startup_event():
-    await connect_redis() 
+    await connect_redis()
 
-app.include_router(auth.router, prefix="/api/v1/auth")
 
 @app.get("/")
 def read_root():

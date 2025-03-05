@@ -1,68 +1,123 @@
-import { useState } from "react"; 
-import useProfileStore from "../../config/api/Store/useProfileStore/useProfileStore"; 
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import styles from "./ProfilePage.module.css";
+import OrderHistory from "../../entities/components/OrderHistory/OrderHistory";
+import useProfileStore from "../../config/api/Store/useProfileStore/useProfileStore";
 
-const Profile = () => {
-  const { user, loading, error, fetchProfile, updateProfile, clearProfile } = useProfileStore();
-  const [fullName, setFullName] = useState("");
-  const [role, setRole] = useState("");
-  const navigate = useNavigate();
+const ProfilePage = () => {
+  const { user, loading, error, fetchProfile, updateProfile } =
+    useProfileStore();
 
-  if (!user && !loading && !error) {
+  // Local state for input fields
+  const [formData, setFormData] = useState({
+    name: "",
+    surname: "",
+    lastname: "",
+    birthdate: "",
+    phoneNumber: "",
+  });
+
+  // Fetch user data when component mounts
+  useEffect(() => {
     fetchProfile();
-  }
+  }, []);
 
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    updateProfile(fullName, role);
+  // Sync local state with user data when fetched
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        surname: user.surname || "",
+        lastname: user.lastname || "",
+        birthdate: user.birthdate || "",
+        phoneNumber: user.phoneNumber || "",
+      });
+    }
+  }, [user]);
+
+  // Handle input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleLogout = () => {
-    clearProfile();
-    navigate("/");
+  // Handle form submission (update profile)
+  const handleUpdate = async () => {
+    await updateProfile(
+      formData.name,
+      formData.surname,
+      formData.lastname,
+      formData.birthdate
+    );
   };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-  if (!user) return <div>Please log in to view your profile.</div>;
 
   return (
-    <div className={styles.profileContainer}>
-      <h2>Профиль</h2>
-      <form onSubmit={handleUpdate} className={styles.profileForm}>
-        <div>
-          <label>Телефон:</label>
-          <p>{user.phoneNumber}</p>
+    <div>
+      <h1>Личный кабинет</h1>
+      <div className="d-flex justify-content-between gap-4">
+        <div className={styles.userOrderHistory}>
+          <OrderHistory />
         </div>
-        <div>
-          <label>Полное имя:</label>
-          <input
-            type="text"
-            value={fullName || user.full_name || ""}
-            onChange={(e) => setFullName(e.target.value)}
-            disabled={loading}
-          />
+
+        <div className={styles.userData}>
+          {loading ? (
+            <p>Загрузка...</p>
+          ) : (
+            <>
+              {error && <p className={styles.error}>{error}</p>}
+
+              <div>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Имя"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="surname"
+                  placeholder="Фамилия"
+                  value={formData.surname}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="lastname"
+                  placeholder="Отчество"
+                  value={formData.lastname}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <input
+                  type="date"
+                  name="birthdate"
+                  placeholder="Дата рождения"
+                  value={formData.birthdate}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="phoneNumber"
+                  placeholder="Мобильный телефон"
+                  value={formData.phoneNumber}
+                  disabled
+                />
+              </div>
+              <button onClick={handleUpdate} disabled={loading}>
+                {loading ? "Обновление..." : "Сохранить"}
+              </button>
+            </>
+          )}
         </div>
-        <div>
-          <label>Роль:</label>
-          <input
-            type="text"
-            value={role || user.role || ""}
-            onChange={(e) => setRole(e.target.value)}
-            disabled={loading}
-          />
-        </div>
-        <button type="submit" disabled={loading}>
-          {loading ? "Сохранение..." : "Сохранить"}
-        </button>
-        <button type="button" onClick={handleLogout} className={styles.logoutButton}>
-          Выйти
-        </button>
-      </form>
-      {error && <p className={styles.error}>{error}</p>}
+      </div>
     </div>
   );
 };
 
-export default Profile;
+export default ProfilePage;

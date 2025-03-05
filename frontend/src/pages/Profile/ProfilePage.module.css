@@ -1,0 +1,41 @@
+
+.userOrderHistory{
+    flex: 1;
+    border-radius: 8px;
+}
+
+.userData {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+  border-radius: 8px;
+  background-color: #fff;
+  gap: 10px;
+}
+
+.userData > div {
+  height: 70px;
+  background-color: #f4f4f8;
+  border-radius: 8px;
+  padding: 0px 20px;
+}
+
+.userData > div > input {
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  line-height: 21.28px;
+  font-weight: 600;
+  color: #272525;
+}
+
+.userData > button {
+  border: none;
+  border-radius: 8px;
+  height: 70px;
+  background-color: #ff9414;
+  color: #fff;
+}

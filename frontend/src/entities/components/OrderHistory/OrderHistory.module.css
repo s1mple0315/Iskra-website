@@ -1,0 +1,37 @@
+.orderHistoryContainer {
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.orderHistoryHeader {
+  padding: 28px;
+  background-color: #fff;
+  border-bottom: 1px solid #1f2029;
+}
+
+.orderHistoryHeader > h1 {
+  font-size: 24px;
+  line-height: 28.8px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.orderHistoryList {
+  padding: 20px 0;
+}
+
+.orderHistoryItem {
+  padding: 15px 28px;
+  margin-bottom: 24px;
+}
+
+.orderHistoryItem > h2 {
+  font-size: 18px;
+  line-height: 21.6px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.orderHistoryItem > h2 > span {
+  color: #ff9414;
+}
