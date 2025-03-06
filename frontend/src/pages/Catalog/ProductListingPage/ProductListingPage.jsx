@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom"; // Removed useNavigate
 import useProductStore from "../../../config/api/Store/useProductStore/UseProductStore";
 import ProductCard from "../../../entities/components/ProductCard/ProductCard";
 import styles from "./ProductListingPage.module.css";
@@ -11,47 +11,20 @@ import useFilterStore from "../../../config/api/Store/useFilterStore/useFilterSt
 const ProductListingPage = () => {
   const { parentId, subcategoryId, subSubcategoryId } = useParams();
   const { products, loading, error, fetchProducts, pagination } = useProductStore();
-  const [currentPage, setCurrentPage] = useState(pagination.page);
+  const { filters, setFilter } = useFilterStore();
   const [showFilters, setShowFilters] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (subSubcategoryId) {
-      fetchProducts(subSubcategoryId, currentPage, pagination.limit);
+      fetchProducts(subSubcategoryId, filters.page, filters.limit);
     }
-  }, [subSubcategoryId, currentPage, pagination.limit, fetchProducts]);
+  }, [subSubcategoryId, filters.page, filters.limit, fetchProducts]);
 
   const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+    setFilter("page", newPage);
   };
 
-  const handleProductClick = (productId) => {
-    console.log("Clicked Product ID:", productId);
-    if (productId) {
-      navigate(`/catalog/${parentId}/${subcategoryId}/${subSubcategoryId}/${productId}`);
-    } else {
-      console.error("Product ID is invalid");
-    }
-  };
-
-  useEffect(() => {
-    const fetchFilteredProducts = async () => {
-      const { getFilterQuery } = useFilterStore();
-      const query = getFilterQuery();
-      try {
-        const response = await fetch(
-          `http://localhost:8000/api/v1/products/filter?${query}`
-        );
-        if (!response.ok) throw new Error("Failed to fetch filtered products");
-        const data = await response.json();
-        // Assuming filter endpoint returns filtered products for the subcategory
-        fetchProducts(subSubcategoryId, currentPage, pagination.limit);
-      } catch (err) {
-        console.error(err.message);
-      }
-    };
-    if (subSubcategoryId) fetchFilteredProducts();
-  }, [subSubcategoryId, currentPage, pagination.limit]);
+  console.log({ parentId, subcategoryId, subSubcategoryId, products });
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -76,21 +49,21 @@ const ProductListingPage = () => {
             products.map((product) => (
               <ProductCard
                 key={product.id}
-                description={product.name} // Changed to name for consistency
+                description={product.name}
                 price={product.price}
-                productId={product.id}
+                productId={product._id}
                 parentId={parentId}
                 subcategoryId={subcategoryId}
-                onClick={() => handleProductClick(product.id)}
+                subSubcategoryId={subSubcategoryId}
               />
             ))
           )}
         </div>
       </div>
       <Pagination
-        currentPage={currentPage}
+        currentPage={filters.page}
         totalCount={pagination.total_count}
-        limit={pagination.limit}
+        limit={filters.limit}
         onPageChange={handlePageChange}
       />
     </div>

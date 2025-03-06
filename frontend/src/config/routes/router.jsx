@@ -37,7 +37,7 @@ const AppRouter = () => {
             {/* Updated Catalog Routes */}
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/catalog/:parentId" element={<ParentCategoryPage />} />
-            <Route path="/catalog/:parentId/:subcategoryId" element={<ParentCategoryPage />} /> {/* Now shows subcategories */}
+            <Route path="/catalog/:parentId/:subcategoryId" element={<ParentCategoryPage />} />
             <Route path="/catalog/:parentId/:subcategoryId/:subSubcategoryId" element={<ProductListingPage />} />
             <Route path="/catalog/:parentId/:subcategoryId/:subSubcategoryId/:productId" element={<ProductDetailsPage />} />
             

@@ -8,6 +8,7 @@ const ProductCard = ({
   price,
   parentId,
   subcategoryId,
+  subSubcategoryId, // Added
   productId,
   onClick,
 }) => {
@@ -23,7 +24,6 @@ const ProductCard = ({
       images: ["/assets/Catalog/ProductImages/iPhone/iPhone.png"],
     };
     console.log(basketItem);
-    
     addItem(basketItem);
   };
 
@@ -38,12 +38,12 @@ const ProductCard = ({
           alt={description}
         />
       </div>
-      <Link to={`/catalog/${parentId}/${subcategoryId}/${productId}`}>
+      <Link to={`/catalog/${parentId}/${subcategoryId}/${subSubcategoryId}/${productId}`}>
         <div className={styles.productInfo}>
           <p>{description}</p>
           <div className={styles.productInfoBottom}>
             <div className={styles.productPrice}>
-              <p>{price.toLocaleString("ru-RU")} ₽</p>{" "}
+              <p>{price.toLocaleString("ru-RU")} ₽</p>
             </div>
             <button
               className={styles.addCartButton}

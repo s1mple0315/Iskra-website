@@ -1,49 +1,37 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styles from "./BurgerMenu.module.css";
 import Burger from "../../../shared/ui/icons/Layout/Header/Burger/Burger";
+import useProductStore from "../../../config/api/Store/useProductStore/UseProductStore";
 
 const BurgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
+  const [selectedParentId, setSelectedParentId] = useState(null);
+  const { categories, fetchCategories, loading, error } = useProductStore();
+
+  useEffect(() => {
+    if (categories.length === 0) {
+      fetchCategories();
+    }
+  }, [categories.length, fetchCategories]);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = (e) => {
     e.stopPropagation();
     setIsOpen(false);
+    setSelectedParentId(null);
   };
 
-  // Static data for dropdown (to be replaced with dynamic data later)
-  const staticCategories = [
-    {
-      name: "Apple",
-      subcategories: [
-        {
-          name: "Mac",
-          items: ["MacBook Air", "MacBook Pro", "Mac Mini", "iMac", "Аксессуары"],
-          seeAllLink: "/catalog/apple-mac",
-        },
-        {
-          name: "iPhone",
-          items: ["iPhone 16 Pro Max", "iPhone 16 Pro", "iPhone 16 Plus", "iPhone 16", "iPhone 15 Pro Max"],
-          seeAllLink: "/catalog/apple-iphone",
-        },
-        {
-          name: "Watch",
-          items: ["MacBook Air", "MacBook Pro", "Mac Mini", "iMac", "Аксессуары"],
-          seeAllLink: "/catalog/apple-watch",
-        },
-        {
-          name: "iPad",
-          items: ["iPhone 16 Pro Max", "iPhone 16 Pro", "iPhone 16 Plus", "iPhone 16", "iPhone 15 Pro Max"],
-          seeAllLink: "/catalog/apple-ipad",
-        },
-      ],
-    },
-  ];
+  const previewImage = "/assets/iphone-preview.png";
+  const selectedParent = categories.find((cat) => cat.id === selectedParentId);
 
-  // Static preview image URL (replace with a real path later)
-  const previewImage = "/assets/iphone-preview.png"; // Placeholder image
+  // Debugging: Log the selected parent and its subcategories
+  useEffect(() => {
+    if (selectedParent) {
+      console.log("Selected Parent:", selectedParent);
+      console.log("Subcategories:", selectedParent.subcategories);
+    }
+  }, [selectedParent]);
 
   return (
     <div className={styles.burgerMenuContainer} onClick={toggleMenu}>
@@ -60,32 +48,68 @@ const BurgerMenu = () => {
             className={styles.dropdownBackground}
             style={{ backgroundImage: `url(${previewImage})` }}
           ></div>
-          <ul className={styles.dropdownList}>
-            {staticCategories.map((category) => (
-              <li key={category.name} className={styles.dropdownItem}>
-                <span>{category.name}</span>
-                <ul className={styles.subcategoryList}>
-                  {category.subcategories.map((subcategory) => (
-                    <li key={subcategory.name} className={styles.subcategoryItem}>
-                      <span>{subcategory.name}</span>
-                      <ul className={styles.nestedItemList}>
-                        {subcategory.items.map((item) => (
-                          <li key={item} className={styles.nestedItem}>
-                            <Link to="#" onClick={closeMenu}>
-                              {item}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                      <Link to={subcategory.seeAllLink} onClick={closeMenu}>
-                        Все товары
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
+          <div className={styles.dropdownContent}>
+            {/* First Column: Parent Categories */}
+            <ul className={styles.parentCategoryList}>
+              {loading ? (
+                <li>Loading...</li>
+              ) : error ? (
+                <li>{error}</li>
+              ) : categories.length === 0 ? (
+                <li>No categories available</li>
+              ) : (
+                categories.map((parent) => (
+                  <li
+                    key={parent.id}
+                    className={styles.parentCategoryItem}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedParentId(parent.id);
+                    }}
+                  >
+                    <span>{parent.name}</span>
+                  </li>
+                ))
+              )}
+            </ul>
+
+            {/* Second Column: Subcategories and Sub-subcategories */}
+            {selectedParent && (
+              <div className={`${styles.subcategoryContainer} ${styles.visible}`}>
+                {selectedParent.subcategories.map((subcategory) => (
+                  <div key={subcategory.id} className={styles.subcategoryColumn}>
+                    <span
+                      className={styles.subcategoryTitle}
+                      style={{ color: "red" }} // Temporary debug color
+                    >
+                      {subcategory.name}
+                    </span>
+                    <ul className={styles.subSubcategoryList}>
+                      {subcategory.subcategories.map((subSubcategory) => (
+                        <li key={subSubcategory.id} className={styles.subSubcategoryItem}>
+                          <Link
+                            to={`/catalog/${selectedParent.id}/${subcategory.id}/${subSubcategory.id}`}
+                            onClick={closeMenu}
+                            style={{ color: "blue" }} // Temporary debug color
+                          >
+                            {subSubcategory.name} (Debug)
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      to={`/catalog/${selectedParent.id}/${subcategory.id}`}
+                      onClick={closeMenu}
+                      className={styles.seeAllLink}
+                      style={{ color: "green" }} // Temporary debug color
+                    >
+                      Все товары (Debug)
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

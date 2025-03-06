@@ -9,15 +9,17 @@ const ParentCategoryPage = () => {
   const { categories, fetchCategories, loading, error } = useProductStore();
 
   useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+    if (categories.length === 0) { // Only fetch if categories are empty
+      fetchCategories();
+    }
+  }, [categories.length, fetchCategories]); // Depend on categories.length
 
   const findCategory = () => {
     const parent = categories.find((cat) => cat.id === parentId);
     if (!parent) return null;
-    if (!subcategoryId) return parent; // Parent level
+    if (!subcategoryId) return parent; 
     const sub = parent.subcategories.find((sub) => sub.id === subcategoryId);
-    return sub || null; // Subcategory level
+    return sub || null;
   };
 
   const category = findCategory();
@@ -36,7 +38,8 @@ const ParentCategoryPage = () => {
               key={sub.id}
               name={sub.name}
               id={sub.id}
-              parentId={subcategoryId || parentId} 
+              parentId={parentId}
+              subcategoryId={subcategoryId || null}
             />
           ))}
         </ul>

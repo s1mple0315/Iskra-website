@@ -124,8 +124,8 @@ const Header = () => {
           <ul className="d-flex justify-content-between align-items-center gap-3">
             {parentCategories.length > 0 ? (
               parentCategories.map((category) => (
-                <li key={category._id}>
-                  <Link to={`/catalog/${category._id}`} title={category.name}>
+                <li key={category.id}>
+                  <Link to={`/catalog/${category.id}`} title={category.name}>
                     {category.name}
                   </Link>
                 </li>
