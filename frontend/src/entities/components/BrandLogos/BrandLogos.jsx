@@ -2,12 +2,12 @@ import styles from "./BrandLogos.module.css";
 
 const BrandLogos = () => {
   const brands = [
-    { name: "Apple", src: "/assets/apple.png" },
-    { name: "Samsung", src: "/assets/samsung.png" },
-    { name: "Dyson", src: "/assets/dyson.png" },
-    { name: "Sony", src: "/assets/sony.png" },
-    { name: "JBL", src: "/assets/jbl.png" },
-    { name: "Rndeks", src: "/assets/rndeks.png" },
+    { name: "Apple", src: "/assets/Main/Slider/apple.png" },
+    { name: "Samsung", src: "/assets/Main/Slider/samsung.png" },
+    { name: "Dyson", src: "/assets/Main/Slider/dyson.png" },
+    { name: "Sony", src: "/assets/Main/Slider/sony.png" },
+    { name: "JBL", src: "/assets/Main/Slider/jbl.png" },
+    { name: "Rndeks", src: "/assets/Main/Slider/yandex.png" },
   ];
 
   return (

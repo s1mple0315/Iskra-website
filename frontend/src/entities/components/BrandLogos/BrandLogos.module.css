@@ -1,24 +1,30 @@
 .brandLogosSection {
-  padding: 20px 0;
-  background: #fff;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
 }
 
 .brandLogosContainer {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   gap: 30px;
-  flex-wrap: wrap;
 }
 
-.brandLogo {
-  width: 100px;
-  height: auto;
-  opacity: 0.8;
-  transition: opacity 0.3s;
+
+@media (max-width: 1200px) {
+  .brandLogosContainer {
+    display: flex;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    scroll-behavior: smooth; /* Smooth scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+  }
+
+  .brandLogosContainer::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for a cleaner look (optional) */
+  }
+
 }
 
-.brandLogo:hover {
-  opacity: 1;
+/* Optional: Hide scrollbar in Firefox */
+.brandLogosContainer {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
