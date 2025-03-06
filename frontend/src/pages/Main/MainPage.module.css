@@ -1,9 +1,13 @@
 .mainPage {
-  padding: 20px;
-  background: transparent;
+  padding: 20px 0;
 }
 
-.bannerSection,
+.bannerSection {
+  height: 300px;
+  background: #ccc;
+  margin-bottom: 20px;
+}
+
 .catalogSection,
 .brandLogosSection,
 .featuredProductsSection,
@@ -17,5 +21,61 @@
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 10px;
   justify-content: center;
-  padding: 20px;
+}
+
+.newSectionButton{
+  border: 1px solid #FF9414;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #FF9414;
+  padding: 15px 20px;
+}
+
+.sectionTitle {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  margin: o;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.blogSection {
+  border-radius: 8px;
+}
+
+.blogGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 767px) {
+  .productGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .blogGrid {
+    grid-template-columns: 1fr; 
+  }
+
+  .sectionTitle {
+    font-size: 24px;
+  }
+
+  .bannerSection {
+    height: 200px;
+  }
+
+  .catalogSection,
+  .brandLogosSection,
+  .featuredProductsSection,
+  .newProductsSection,
+  .blogSection {
+    margin-bottom: 20px;
+  }
 }
