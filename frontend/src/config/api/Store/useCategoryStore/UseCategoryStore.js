@@ -1,6 +1,10 @@
 import { create } from "zustand";
 import axios from "axios";
 
+const api = axios.create({
+  baseURL: "http://localhost:8002/api/v1/products",
+});
+
 const useCategoryStore = create((set) => ({
   parentCategories: [],
   parentCategoryName: "",
@@ -12,12 +16,11 @@ const useCategoryStore = create((set) => ({
   fetchParentCategories: async () => {
     set({ loading: true });
     try {
-      const response = await axios.get(
-        "http://localhost:8002/api/v1/products/categories/parents"
-      );
-      set({ parentCategories: response.data });
+      const response = await api.get("/categories/parents-with-subcategories");
+      set({ parentCategories: Array.isArray(response.data) ? response.data : [] });
     } catch (err) {
       set({ error: "Failed to fetch parent categories" });
+      console.error(err);
     } finally {
       set({ loading: false });
     }

@@ -15,16 +15,11 @@ const ProductDetailsPage = () => {
     }
   }, [productId, fetchProduct]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
-    <div className={`${styles.productDetailsPage}`}>
+    <div className={styles.productDetailsPage}>
       <div className={styles.productDetailsContainer}>
         <div className={`${styles.productDetailsContent} container d-flex justify-content-between`}>
           {product?.images && product.images.length > 0 && (

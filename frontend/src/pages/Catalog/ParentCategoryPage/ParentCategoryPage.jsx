@@ -1,39 +1,43 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import useCategoryStore from "../../../config/api//Store/useCategoryStore/UseCategoryStore";
-
 import styles from "./ParentCategoryPage.module.css";
+import useProductStore from "../../../config/api/Store/useProductStore/UseProductStore";
 import SubCategory from "../../../entities/components/SubCategory/SubCategory";
 
 const ParentCategoryPage = () => {
-  const { id } = useParams();
-  const {
-    childCategories,
-    parentCategoryName,
-    loading,
-    error,
-    fetchChildCategories,
-  } = useCategoryStore();
+  const { parentId, subcategoryId } = useParams();
+  const { categories, fetchCategories, loading, error } = useProductStore();
 
   useEffect(() => {
-    fetchChildCategories(id);
-  }, [id, fetchChildCategories]);
+    fetchCategories();
+  }, [fetchCategories]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const findCategory = () => {
+    const parent = categories.find((cat) => cat.id === parentId);
+    if (!parent) return null;
+    if (!subcategoryId) return parent; // Parent level
+    const sub = parent.subcategories.find((sub) => sub.id === subcategoryId);
+    return sub || null; // Subcategory level
+  };
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  const category = findCategory();
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!category) return <div>Category not found</div>;
 
   return (
     <div className={styles.parentCategoryPage}>
-      <h2>{parentCategoryName}</h2>
+      <h2>{category.name}</h2>
       <div>
         <ul className={styles.subCategories}>
-          {childCategories.map((subcategory) => (
-            <SubCategory key={subcategory.id} name={subcategory.name} id={subcategory.id} parentId={id} />
+          {category.subcategories.map((sub) => (
+            <SubCategory
+              key={sub.id}
+              name={sub.name}
+              id={sub.id}
+              parentId={subcategoryId || parentId} 
+            />
           ))}
         </ul>
       </div>

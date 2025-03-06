@@ -7,33 +7,15 @@ const MainPage = lazy(() => import("../../pages/Main/MainPage"));
 const Company = lazy(() => import("../../pages/AboutPage/Company"));
 const DeliveryPage = lazy(() => import("../../pages/Delivery/DeliveryPage"));
 const Contacts = lazy(() => import("../../pages/Contacts/Contacts"));
-const RegularCustomersPage = lazy(() =>
-  import("../../pages/RegularCustomers/RegularCustomersPage")
-);
+const RegularCustomersPage = lazy(() => import("../../pages/RegularCustomers/RegularCustomersPage"));
 const GuaranteePage = lazy(() => import("../../pages/Guarantee/GuaranteePage"));
-
 const BasketPage = lazy(() => import("../../pages/Basket/BasketPage"));
-
-const BlogListingPage = lazy(() =>
-  import("../../pages/Blog/BlogListingPage/BlogListingPage")
-);
-const BlogDetailsPage = lazy(() =>
-  import("../../pages/Blog/BlogDetailsPage/BlogDetailsPage")
-);
-
-const CatalogPage = lazy(() =>
-  import("../../pages/Catalog/CatalogPage/CatalogPage")
-);
-const ProductListingPage = lazy(() =>
-  import("../../pages/Catalog/ProductListingPage/ProductListingPage")
-);
-const ProductDetailsPage = lazy(() =>
-  import("../../pages/Catalog/ProductDetailsPage/ProductDetailsPage")
-);
-const ParentCategoryPage = lazy(() =>
-  import("../../pages/Catalog/ParentCategoryPage/ParentCategoryPage")
-);
-
+const BlogListingPage = lazy(() => import("../../pages/Blog/BlogListingPage/BlogListingPage"));
+const BlogDetailsPage = lazy(() => import("../../pages/Blog/BlogDetailsPage/BlogDetailsPage"));
+const CatalogPage = lazy(() => import("../../pages/Catalog/CatalogPage/CatalogPage"));
+const ProductListingPage = lazy(() => import("../../pages/Catalog/ProductListingPage/ProductListingPage"));
+const ProductDetailsPage = lazy(() => import("../../pages/Catalog/ProductDetailsPage/ProductDetailsPage"));
+const ParentCategoryPage = lazy(() => import("../../pages/Catalog/ParentCategoryPage/ParentCategoryPage"));
 const ProfilePage = lazy(() => import("../../pages/Profile/ProfilePage"));
 
 const AppRouter = () => {
@@ -48,27 +30,17 @@ const AppRouter = () => {
             <Route path="/delivery" element={<DeliveryPage />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/regular" element={<RegularCustomersPage />} />
-
-            {/* Basket Routes */}
             <Route path="/basket" element={<BasketPage />} />
-
-            {/* Blog Routes */}
             <Route path="/blog" element={<BlogListingPage />} />
             <Route path="/blog/:id" element={<BlogDetailsPage />} />
-
-            {/* Catalog Routes */}
-            <Route path="/catalog" element={<CatalogPage />} />
-            <Route path="/catalog/:id" element={<ParentCategoryPage />} />
-            <Route
-              path="/catalog/:parentId/:subcategoryId"
-              element={<ProductListingPage />}
-            />
-            <Route
-              path="/catalog/:parentId/:subcategoryId/:productId"
-              element={<ProductDetailsPage />}
-            />
             
-            {/* Profile Route */}
+            {/* Updated Catalog Routes */}
+            <Route path="/catalog" element={<CatalogPage />} />
+            <Route path="/catalog/:parentId" element={<ParentCategoryPage />} />
+            <Route path="/catalog/:parentId/:subcategoryId" element={<ParentCategoryPage />} /> {/* Now shows subcategories */}
+            <Route path="/catalog/:parentId/:subcategoryId/:subSubcategoryId" element={<ProductListingPage />} />
+            <Route path="/catalog/:parentId/:subcategoryId/:subSubcategoryId/:productId" element={<ProductDetailsPage />} />
+            
             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </Suspense>

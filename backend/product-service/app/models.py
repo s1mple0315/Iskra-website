@@ -25,7 +25,6 @@ class ChildCategory(CategoryBase):
 class ParentCategory(CategoryBase):
     id: str
     subcategories: List["ChildCategory"] = Field(default_factory=list, description="List of subcategories")
-
     class Config:
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: object_id_to_str}

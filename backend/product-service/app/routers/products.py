@@ -174,7 +174,7 @@ async def get_parents_with_subcategories():
     parent_categories = []
     cursor = db.categories.find({"parent_id": None})
     async for category in cursor:
-        print(f"Processing parent category: {category}")  # Debug log
+        print(f"Processing parent category: {category}")  
         processed_category = {
             "_id": str(category["_id"]),
             "name": category["name"],
@@ -190,7 +190,7 @@ async def get_parents_with_subcategories():
                     and "_id" in sub
                     and re.match(r"^[0-9a-fA-F]{24}$", sub["_id"])
                 ):
-                    print(f"Processing subcategory: {sub}")  # Debug log
+                    print(f"Processing subcategory: {sub}") 
                     sub_cat = await db.categories.find_one(
                         {"_id": ObjectId(sub["_id"])}
                     )
@@ -224,7 +224,7 @@ async def get_all_parent_categories():
     async for category in cursor:
         logger.info(f"Processing parent category: {category}")
         processed_category = {
-            "_id": str(category["_id"]),
+            "id": str(category["_id"]),
             "name": category["name"],
             "parent_id": None,
             "image": category.get("image"),

@@ -1,25 +1,23 @@
 import { useEffect } from "react";
-
-import styles from "./CatalogPage.module.css"
-import useCategoryStore from "../../../config/api/Store/useCategoryStore/UseCategoryStore";
+import styles from "./CatalogPage.module.css";
+import useProductStore from "../../../config/api/Store/useProductStore/UseProductStore";
 import ParentCategory from "../../../entities/components/ParentCategory/ParentCategory";
 
 const CatalogPage = () => {
-  const { parentCategories, fetchParentCategories } = useCategoryStore();
+  const { categories, fetchCategories, loading, error } = useProductStore();
 
   useEffect(() => {
-    if (parentCategories.length === 0) {
-      fetchParentCategories();
+    if (categories.length === 0) {
+      fetchCategories();
     }
-  }, [parentCategories, fetchParentCategories]);
+  }, [categories, fetchCategories]);
 
-  if (!parentCategories) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
-    <div className={`${styles.catalogPage}`}>
-      {parentCategories.length > 0 ? (
+    <div className={styles.catalogPage}>
+      {categories.length > 0 ? (
           <ParentCategory />
       ) : (
         <div>No categories available</div>
