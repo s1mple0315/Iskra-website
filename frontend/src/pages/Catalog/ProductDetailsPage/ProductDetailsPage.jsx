@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import styles from "./ProductDetailsPage.module.css";
 import useProductStore from "../../../config/api/Store/useProductStore/UseProductStore";
 import ProductPageSlider from "../../../entities/components/Slider/ProductPageSlider/ProductPageSlider";
 import ProductDataDisplay from "../../../entities/components/ProductDataDisplay/ProductDataDisplay";
+
+import styles from "./ProductDetailsPage.module.css"
 
 const ProductDetailsPage = () => {
   const { productId } = useParams();
@@ -19,13 +20,19 @@ const ProductDetailsPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className={styles.productDetailsPage}>
+    <div className="product-details-page">
       <div className={styles.productDetailsContainer}>
-        <div className={`${styles.productDetailsContent} container d-flex justify-content-between`}>
-          {product?.images && product.images.length > 0 && (
-            <ProductPageSlider product={product} />
-          )}
-          <ProductDataDisplay product={product} />
+        <div className="container">
+          <div className="row justify-content-between">
+            {product?.images && product.images.length > 0 && (
+              <div className={`${styles.imageSliderContainer} col-12 col-md-5`}>
+                <ProductPageSlider product={product} />
+              </div>
+            )}
+            <div className="col-12 col-md-6">
+              <ProductDataDisplay product={product} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

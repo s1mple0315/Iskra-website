@@ -1,0 +1,126 @@
+.productDataDisplay {
+  flex: 1;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  max-width: 500px;
+}
+
+.productHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.brand {
+  font-size: 16px; /* Slightly smaller than in the image */
+  color: #666;
+  margin: 0;
+  text-transform: uppercase; /* Matches the "Apple" style */
+}
+
+.productId {
+  font-size: 14px;
+  color: #999;
+}
+
+.productName {
+  font-size: 26px; /* Adjusted to match the screenshot */
+  font-weight: 600;
+  color: #333;
+  margin: 10px 0 20px;
+  line-height: 1.2;
+}
+
+.optionSection {
+  margin-bottom: 20px;
+}
+
+.optionLabel {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.colorOptions {
+  display: flex;
+  gap: 10px;
+}
+
+.colorSwatch {
+  width: 24px; /* Slightly smaller to match the image */
+  height: 24px;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.colorSwatch:hover {
+  border-color: #f5a623;
+}
+
+.memoryOptions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.memoryButton {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.memoryButton:hover {
+  background-color: #f5a623;
+  border-color: #f5a623;
+  color: #fff;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 20px 0;
+}
+
+.priceAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  font-size: 32px; /* Matches the large price in the image */
+  font-weight: 700;
+  color: #FF9414;
+  margin: 0;
+}
+
+.addToCart {
+  padding: 12px 24px; /* Larger button to match the image */
+  background-color: #FF9414;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.addToCart:hover {
+  background-color: #e59400;
+}
+
+.addToCart:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

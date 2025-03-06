@@ -1,3 +1,11 @@
 .productDetailsContainer {
   background-color: #fff;
 }
+
+.imageSliderContainer{
+  height: 400px;
+}
+
+.imageSliderContainer > div{
+  height: 100%;
+}

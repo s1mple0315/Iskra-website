@@ -20,55 +20,58 @@ const ProductDataDisplay = ({ product }) => {
     addItem(basketItem);
   };
 
+  // Mock color swatches (replace with actual logic if backend provides color hex codes)
+  const colorSwatches = product?.color
+    ? Array.isArray(product.color)
+      ? product.color
+      : [product.color]
+    : ["#fff", "#000", "#f5a623"]; // Default swatches if no data
+
   return (
     <div className={styles.productDataDisplay}>
-      <div>
-        <h3>{product?.brand || "Brand"}</h3>{" "}
-        <span>#{product?._id || "ID"}</span>
+      <div className={styles.productHeader}>
+        <h3 className={styles.brand}>{product?.brand || "Brand"}</h3>
+        <span className={styles.productId}>#{product?._id || "ID"}</span>
       </div>
-      <div>
-        <h3>{product?.name || "Product Name"}</h3>
+      <h1 className={styles.productName}>{product?.name || "Product Name"}</h1>
+      <div className={styles.optionSection}>
+        <p className={styles.optionLabel}>Цвет</p>
+        <div className={styles.colorOptions}>
+          {colorSwatches.map((color, index) => (
+            <div
+              key={index}
+              className={styles.colorSwatch}
+              style={{ backgroundColor: color }}
+            ></div>
+          ))}
+        </div>
       </div>
-      <div>
-        <p>Цвет</p>
-        <div>
-          {product?.color ? (
-            Array.isArray(product.color) ? (
-              product.color.map((color, index) => (
-                <div key={index}>{color}</div>
-              ))
-            ) : (
-              <div>{product.color}</div>
-            )
+      <div className={styles.optionSection}>
+        <p className={styles.optionLabel}>Память</p>
+        <div className={styles.memoryOptions}>
+          {product?.memory && Array.isArray(product.memory) ? (
+            product.memory.map((memory, index) => (
+              <button key={index} className={styles.memoryButton}>
+                {memory}
+              </button>
+            ))
           ) : (
-            <div>No color available</div>
+            <button className={styles.memoryButton}>No memory available</button>
           )}
         </div>
       </div>
-      <div>
-        <p>Память</p>
-        <div>
-          {product?.memory ? (
-            Array.isArray(product.memory) ? (
-              product.memory.map((memory, index) => (
-                <div key={index}>{memory}</div>
-              ))
-            ) : (
-              <div>{product.memory}</div>
-            )
-          ) : (
-            <div>No memory available</div>
-          )}
-        </div>
-      </div>
-      <hr />
-      <div className="d-flex justify-content-between">
-        <h3>
+      <hr className={styles.divider} />
+      <div className={styles.priceAction}>
+        <h2 className={styles.price}>
           {product?.price
             ? `${product.price.toLocaleString("ru-RU")} ₽`
             : "Price unavailable"}
-        </h3>
-        <button onClick={handleAddToBasket} disabled={!product}>
+        </h2>
+        <button
+          className={styles.addToCart}
+          onClick={handleAddToBasket}
+          disabled={!product}
+        >
           Добавить в корзину
         </button>
       </div>
