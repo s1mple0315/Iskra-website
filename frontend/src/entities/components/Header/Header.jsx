@@ -12,21 +12,13 @@ import HeaderTelegram from "../../../shared/ui/icons/Layout/Header/Social/Telegr
 import HeaderWhatsapp from "../../../shared/ui/icons/Layout/Header/Social/Whatsapp/HeaderWhatsapp";
 
 const Header = () => {
-  const { parentCategories, loading, error, fetchParentCategories } =
+  const { parentCategories, fetchParentCategories } =
     useCategoryStore();
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchParentCategories();
   }, [fetchParentCategories]);
-
-  if (loading) {
-    return <div>Loading categories...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
 
   const handleSearchResults = (results) => {
     if (results.length > 0) {

@@ -12,20 +12,11 @@ import Visa from "../../../shared/ui/icons/Layout/Payment/Visa/Visa";
 import Sbp from "../../../shared/ui/icons/Layout/Payment/Sbp/Sbp";
 
 const Footer = () => {
-  const { parentCategories, loading, error, fetchParentCategories } =
-    useCategoryStore();
+  const { parentCategories, fetchParentCategories } = useCategoryStore();
 
   useEffect(() => {
     fetchParentCategories();
   }, [fetchParentCategories]);
-
-  if (loading) {
-    return <div>Loading categories...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
 
   return (
     <div
