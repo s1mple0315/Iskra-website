@@ -101,10 +101,10 @@ const Header = () => {
           <div
             className={`${styles.headerMiddleLeft} d-flex align-items-center gap-3`}
           >
-            <div>
+            <div className={styles.headerAppLogo}>
               <HeaderAppLogo />
             </div>
-            <div>
+            <div className={styles.burgerMenuContainer}>
               <BurgerMenu />
             </div>
             <div className={styles.searchBarContainer}>
@@ -121,7 +121,7 @@ const Header = () => {
           </div>
         </div>
         <div className={`${styles.headerBottom}`}>
-          <ul className="d-flex justify-content-between align-items-center gap-3">
+          <ul className="d-flex justify-content-between align-items-center">
             {parentCategories.length > 0 ? (
               parentCategories.map((category) => (
                 <li key={category.id}>

@@ -1,4 +1,5 @@
 .header {
+  width: 100%;
   background-color: #fff;
   margin-bottom: 40px;
 }
@@ -63,6 +64,7 @@
 
 .headerBottom ul {
   list-style: none;
+  gap: 50px;
   padding: 0;
   margin: 0;
 }
@@ -75,15 +77,25 @@
   font-weight: 600;
 }
 
+@media (max-width: 1400px) {
+  .headerBottom ul {
+    gap: 30px;
+  }
+}
+
 @media (max-width: 1200px) {
-  .headerTop > div{
+  .headerTop > div {
     gap: 40px;
+  }
+
+  .headerBottom ul {
+    gap: 5px;
   }
 
   .headerTopLinks {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    white-space: nowrap; /* Prevent wrapping of items */
+    white-space: nowrap;
   }
 
   .headerTopLinks ul {
@@ -97,8 +109,74 @@
 }
 
 @media (max-width: 992px) {
-  .headerTop{
+  .headerTop {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .headerBottom {
+    display: none;
+  }
+
+  .headerMiddleRight {
+    display: none !important;
+  }
+
+  .burgerMenuContainer {
+    display: none;
+  }
+
+  .headerMiddle {
+    width: 100% !important;
+  }
+
+  .headerMiddleLeft {
+    width: 100% !important;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 640px) {
+  .headerTop {
+    display: none !important;
+  }
+}
+
+
+@media (max-width: 410px) {
+  .headerMiddleLeft {
+    gap: 5px; /* Reduce gap for smaller screens */
+  }
+
+  .headerAppLogo,
+  .searchBarContainer {
+    flex: 1; /* Ensure both take equal space */
+    max-width: 50%; /* Cap at 50% to enforce equal space */
+  }
+
+  .headerAppLogo svg {
+    width: 100%; /* Ensure logo scales within its container */
+    height: auto;
+  }
+
+  .searchBarContainer {
+    display: flex;
+    align-items: center;
+  }
+
+  .searchBarContainer input {
+    width: 100%; /* Ensure search input fills its container */
+  }
+}
+
+@media (max-width: 320px) {
+  .headerAppLogo,
+  .searchBarContainer {
+    flex: 1; /* Reaffirm equal space at 320px */
+    max-width: 50%;
+  }
+
+  .headerMiddle {
+    padding: 8px 0; /* Reduce padding for compact layout */
   }
 }
