@@ -1,8 +1,48 @@
+import { useState } from "react";
+import useBasketStore from "../../config/api/Store/useBasketStore/useBasketStore";
 import CheckoutTabs from "../../entities/components/CheckoutTabs/CheckoutTabs";
 import Wallet from "../../shared/ui/icons/Checkout/Wallet/Wallet";
 import styles from "./CheckoutPage.module.css";
 
 const CheckoutPage = () => {
+  const { checkout, items, clearBasket, getTotalPrice } = useBasketStore();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const [customerData, setCustomerData] = useState({
+    phone: "",
+    email: "",
+    address: "г. Москва, ул. Ленина, д. 10", // ✅ Default address for testing
+    paymentMethod: "cash",
+  });
+
+  const handleChange = (e) => {
+    setCustomerData({ ...customerData, [e.target.name]: e.target.value });
+  };
+
+  const handleCheckout = async () => {
+    if (!customerData.phone) {
+      setError("Пожалуйста, заполните обязательные поля (телефон)");
+      return;
+    }
+  
+    console.log("Sending Order with Data:", customerData, items); // ✅ Debugging log
+  
+    setLoading(true);
+    setError(null);
+  
+    try {
+      const order = await checkout("user123", customerData.address);
+      console.log("Order Successful:", order);
+      clearBasket();
+    } catch (err) {
+      console.error("Checkout Error:", err);
+      setError(err.message || "Ошибка при оформлении заказа");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
     <div className={styles}>
       <section></section>
@@ -14,10 +54,23 @@ const CheckoutPage = () => {
           <h3>Данные покупателя</h3>
           <div className={styles.customerDetails}>
             <div>
-              <input type="text" placeholder="Телефон" />
+              <input
+                type="text"
+                name="phone"
+                placeholder="Телефон"
+                value={customerData.phone}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div>
-              <input type="text" placeholder="Email (Не обязательно)" />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email (Не обязательно)"
+                value={customerData.email}
+                onChange={handleChange}
+              />
             </div>
           </div>
         </div>
@@ -42,15 +95,21 @@ const CheckoutPage = () => {
         </div>
         <div>
           <h3>Выберите способ получения</h3>
-          <div>
-            <CheckoutTabs />
-          </div>
+          <CheckoutTabs />
         </div>
       </section>
       <section>
-        <div className={`${styles.checkoutSummary} d-flex align-items-center justify-content-between`}>
+        <div
+          className={`${styles.checkoutSummary} d-flex align-items-center justify-content-between`}
+        >
           <div>
-            <button className={styles.checkoutButton}>Оплатить заказ (184 799₽)</button>
+            <button
+              className={styles.checkoutButton}
+              onClick={handleCheckout}
+              disabled={loading}
+            >
+              {loading ? "Обрабатывается..." : `Оплатить заказ (${getTotalPrice()}₽)`}
+            </button>
           </div>
           <div className={`${styles.terms} d-flex justify-content-between`}>
             <div className={styles.termsText}>
@@ -62,7 +121,7 @@ const CheckoutPage = () => {
             <div className="d-flex gap-3">
               <div className={styles.costItem}>
                 <p>Стоимость товаров</p>
-                <span>184 000₽</span>
+                <span>{getTotalPrice()}₽</span>
               </div>
               <div className={styles.costItem}>
                 <p>Доставка</p>
@@ -71,6 +130,7 @@ const CheckoutPage = () => {
             </div>
           </div>
         </div>
+        {error && <p className={styles.errorMessage}>{error}</p>}
       </section>
     </div>
   );

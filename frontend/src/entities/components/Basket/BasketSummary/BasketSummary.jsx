@@ -1,33 +1,24 @@
 import { useState } from "react";
 import styles from "./BasketSummary.module.css";
 import useBasketStore from "../../../../config/api/Store/useBasketStore/useBasketStore"; // Adjust path
+import { useNavigate } from "react-router-dom";
 
 const BasketSummary = () => {
   const { items, getTotalItems, getTotalPrice, checkout } = useBasketStore();
-  const [shippingAddress, setShippingAddress] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const userId = "user123"; // Replace with real auth logic
 
-  const handleCheckout = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      if (items.length === 0) throw new Error("Basket is empty");
-      if (!shippingAddress) throw new Error("Shipping address is required");
-      await checkout(userId, shippingAddress);
-      alert("Заказ успешно создан!");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleApplyPromo = () => {
     setError(promoCode ? "Promo applied (fake)" : "Invalid promo code");
     setPromoCode(""); 
+  };
+
+  const navigate = useNavigate();
+
+  const handleProceedToCheckout = () => {
+    navigate("/checkout"); // Navigate to checkout page
   };
 
   return (
@@ -39,8 +30,7 @@ const BasketSummary = () => {
       {error && <p className={styles.error}>{error}</p>}
       <button
         className={styles.checkoutButton}
-        onClick={handleCheckout}
-        disabled={items.length === 0 || !shippingAddress || isLoading}
+        onClick={handleProceedToCheckout}
       >
         {isLoading ? "Обработка..." : "Оформить заказ"}
       </button>
@@ -59,15 +49,6 @@ const BasketSummary = () => {
         >
           Применить
         </button>
-      </div>
-      <div className={styles.shippingSection}>
-        <input
-          type="text"
-          placeholder="Адрес доставки"
-          value={shippingAddress}
-          onChange={(e) => setShippingAddress(e.target.value)}
-          className={styles.shippingInput}
-        />
       </div>
     </div>
   );

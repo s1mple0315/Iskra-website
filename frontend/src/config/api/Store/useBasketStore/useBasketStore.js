@@ -1,11 +1,12 @@
-<<<<<<< HEAD
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { checkoutOrder } from "./orders";
 
 const useBasketStore = create(
   persist(
     (set, get) => ({
       items: [],
+
       addItem: (item) =>
         set((state) => {
           const existingItem = state.items.find((i) => i.id === item.id);
@@ -17,28 +18,35 @@ const useBasketStore = create(
               : [...state.items, { ...item, quantity: 1 }],
           };
         }),
+
       removeItem: (id) =>
         set((state) => ({
           items: state.items.filter((item) => item.id !== id),
         })),
+
       updateQuantity: (id, quantity) =>
         set((state) => ({
           items: state.items.map((item) =>
             item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
           ),
         })),
+
       clearBasket: () => set({ items: [] }),
+
       getTotalItems: () =>
         get().items.reduce((total, item) => total + item.quantity, 0),
+
       getTotalPrice: () =>
         get()
           .items.reduce((total, item) => total + item.price * item.quantity, 0)
           .toFixed(2),
+
       checkout: async (userId, shippingAddress) => {
         const items = get().items;
         if (items.length === 0) throw new Error("Basket is empty");
 
         const totalAmount = parseFloat(get().getTotalPrice());
+
         const orderData = {
           user_id: userId,
           items: items.map((item) => ({
@@ -49,8 +57,11 @@ const useBasketStore = create(
           })),
           total_amount: totalAmount,
           shipping_address: shippingAddress,
+          status: "pending", // Ensure this is always included
         };
-        console.log("Sending Order Data:", orderData); // Add this line
+
+        console.log("📤 Sending Order Data:", orderData); // Debug
+
         const response = await fetch("http://localhost:8004/api/v1/orders", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -59,7 +70,7 @@ const useBasketStore = create(
 
         if (!response.ok) {
           const errorData = await response.json();
-          console.error("Server Error:", errorData); // Add this line
+          console.error("❌ Server Error:", errorData);
           throw new Error(errorData.detail || "Failed to create order");
         }
 
@@ -77,54 +88,3 @@ const useBasketStore = create(
 );
 
 export default useBasketStore;
-=======
-import { create } from 'zustand';
-
-const useBasketStore = create((set, get) => ({
-  items: [], // Array to store basket items { id, name, price, quantity }
-
-  addItem: (item) => {
-    set((state) => {
-      const existingItem = state.items.find((i) => i.id === item.id);
-      if (existingItem) {
-        return {
-          items: state.items.map((i) =>
-            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-          ),
-        };
-      }
-      return { items: [...state.items, { ...item, quantity: 1 }] };
-    });
-  },
-
-  removeItem: (id) => {
-    set((state) => ({
-      items: state.items.filter((item) => item.id !== id),
-    }));
-  },
-
-  updateQuantity: (id, quantity) => {
-    set((state) => ({
-      items: state.items.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
-      ),
-    }));
-  },
-
-  clearBasket: () => {
-    set({ items: [] });
-  },
-
-  getTotalItems: () => {
-    return get().items.reduce((total, item) => total + item.quantity, 0);
-  },
-
-  getTotalPrice: () => {
-    return get().items
-      .reduce((total, item) => total + item.price * item.quantity, 0)
-      .toFixed(2);
-  },
-}));
-
-export default useBasketStore;
->>>>>>> 79865be076c61b080c7f17d0a92d3d5c453e1b12

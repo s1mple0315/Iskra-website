@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from typing import List
 from bson import ObjectId
@@ -6,15 +6,12 @@ from app.database import get_database
 from app.models import Order, OrderBase, OrderItem, OrderStatus
 from datetime import datetime
 import httpx
+import json
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/v1/orders", tags=["Orders"])
 
-# Configuration (could be moved to a config file or env vars)
-PRODUCT_SERVICE_URL = (
-    "http://product-service:8002/api/v1/products"  # Adjust URL as needed
-)
-
+PRODUCT_SERVICE_URL = "http://localhost:8002/api/v1/products/products"
 
 class ProductResponse(BaseModel):
     id: str
@@ -23,20 +20,23 @@ class ProductResponse(BaseModel):
     stock: int
 
 
-async def fetch_product(product_id: str) -> ProductResponse:
+async def fetch_product(product_id: str):
     """Fetch product details from the product-service."""
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(f"{PRODUCT_SERVICE_URL}/{product_id}")
             response.raise_for_status()
-            return ProductResponse(**response.json())
+            return response.json()
         except httpx.HTTPStatusError as e:
             raise HTTPException(
                 status_code=e.response.status_code,
                 detail=f"Product fetch failed: {e.response.text}",
             )
         except httpx.RequestError:
-            raise HTTPException(status_code=503, detail="Product service unavailable")
+            raise HTTPException(
+                status_code=503,
+                detail="🛑 Product service is down. Please try again later.",
+            )
 
 
 async def update_product_stock(product_id: str, quantity: int):
@@ -45,7 +45,7 @@ async def update_product_stock(product_id: str, quantity: int):
         try:
             response = await client.patch(
                 f"{PRODUCT_SERVICE_URL}/{product_id}/stock",
-                json={"quantity": -quantity},  # Negative to reduce stock
+                json={"quantity": -quantity},
             )
             response.raise_for_status()
         except httpx.HTTPStatusError as e:
@@ -59,47 +59,54 @@ async def update_product_stock(product_id: str, quantity: int):
 
 @router.post("/", response_model=Order, status_code=status.HTTP_201_CREATED)
 async def create_order(
-    order: OrderBase, db: AsyncIOMotorDatabase = Depends(get_database)
+    request: Request,
+    order: OrderBase,
+    db: AsyncIOMotorDatabase = Depends(get_database),
 ):
     """Create a new order with validation against product-service."""
-    total_amount = 0
-    items = []
 
-    # Validate products and update stock
-    for item in order.items:
-        product = await fetch_product(item.product_id)
-        if product.stock < item.quantity:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Insufficient stock for product {product.name} (available: {product.stock})",
-            )
-        if item.price != product.price:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Price mismatch for product {product.name} (expected: {product.price})",
-            )
+    # ✅ Debugging: Print Raw Request
+    raw_body = await request.body()
+    print("\n🛑 RAW REQUEST BODY:")
+    print(raw_body.decode("utf-8"))
 
-        total_amount += product.price * item.quantity
-        items.append(
-            OrderItem(
-                product_id=product.id,
-                name=product.name,
-                price=product.price,
-                quantity=item.quantity,
-            )
+    # ✅ Debugging: Print Parsed Order Data
+    parsed_order = order.model_dump()
+    print("\n✅ Parsed Order Data (Pydantic Validated):")
+    print(json.dumps(parsed_order, indent=2, ensure_ascii=False))  # ✅ Corrected
+
+    # ✅ Ensure `total_amount` is a float
+    if not isinstance(order.total_amount, (float, int)):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid total_amount type: {type(order.total_amount)}. Expected float.",
         )
-        await update_product_stock(product.id, item.quantity)
 
-    if abs(total_amount - order.total_amount) > 0.01:
-        raise HTTPException(status_code=400, detail="Total amount mismatch")
+    # ✅ Validate total amount
+    calculated_total = sum(item.price * item.quantity for item in order.items)
+    print(f"\n✅ Calculated Total Amount: {calculated_total}")
 
-    order_dict = order.dict()
-    order_dict["items"] = [item.dict() for item in items]
+    if abs(calculated_total - order.total_amount) > 0.01:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Total amount mismatch: Expected {calculated_total}, got {order.total_amount}",
+        )
+
+    # ✅ Store Order in MongoDB
+    order_dict = parsed_order
+    order_dict["_id"] = str(ObjectId())  # Assign unique ID
     order_dict["created_at"] = datetime.now().isoformat()
     order_dict["updated_at"] = datetime.now().isoformat()
 
+    # ✅ Check if MongoDB is available
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database connection failed")
+
     result = await db.orders.insert_one(order_dict)
     created_order = await db.orders.find_one({"_id": result.inserted_id})
+
+    print("\n✅ MongoDB Insert Result:", created_order)
+
     return Order(**created_order, id=str(created_order["_id"]))
 
 
@@ -113,9 +120,7 @@ async def get_order(order_id: str, db: AsyncIOMotorDatabase = Depends(get_databa
 
 
 @router.get("/user/{user_id}", response_model=List[Order])
-async def get_user_orders(
-    user_id: str, db: AsyncIOMotorDatabase = Depends(get_database)
-):
+async def get_user_orders(user_id: str, db: AsyncIOMotorDatabase = Depends(get_database)):
     """Retrieve all orders for a user."""
     cursor = db.orders.find({"user_id": user_id})
     orders = [Order(**order, id=str(order["_id"])) async for order in cursor]
@@ -141,7 +146,7 @@ async def update_order(
             status_code=400, detail="Cannot modify items or total amount after creation"
         )
 
-    update_dict = update_data.dict(exclude_unset=True)
+    update_dict = update_data.model_dump(exclude_unset=True)
     update_dict["updated_at"] = datetime.now().isoformat()
 
     result = await db.orders.update_one(

@@ -37,7 +37,7 @@ const MainPage = () => {
 
   return (
     <div className={styles.mainPage}>
-      <section className={styles.bannerSection}>Banner</section>
+      {/* <section className={styles.bannerSection}>Banner</section> */}
       <section className={styles.catalogSection}>
         <ParentCategory />
       </section>

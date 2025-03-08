@@ -8,7 +8,6 @@ const BasketList = () => {
   const { items, removeItem } = useBasketStore();
   const [selectedItems, setSelectedItems] = useState([]);
 
-  // Debug: Log items to confirm data
   console.log("Items in BasketList:", items);
 
   const handleSelectAll = () => {
