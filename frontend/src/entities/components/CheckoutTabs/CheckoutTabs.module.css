@@ -1,0 +1,101 @@
+.tabsContainer {
+  font-family: Arial, sans-serif;
+}
+
+.tabsHeader {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.tabButton {
+  padding: 20px 40px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.tabButton.active {
+  background-color: #ff9414;
+  color: #fff;
+}
+
+.tabButton:not(.active) {
+  background-color: transparent;
+  border: 1px solid #ff9414;
+  color: #ff9414;
+}
+
+.tabsContent {
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+}
+
+.tabContent {
+  display: flex;
+  width: 100%;
+  gap: 15px;
+}
+
+.dropdownGroup {
+  gap: 10px;
+}
+
+.dropdownGroup select {
+  padding: 27px 27px 27px 32px;
+  font-size: 16px;
+  line-height: 21.28px;
+  font-weight: 600;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* New styles for Pickup content */
+.pickupContainer {
+  position: relative;
+  gap: 20px;
+}
+
+.mapSection {
+  flex: 2;
+}
+
+.mapImage {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+}
+
+.infoSection {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: -120px;
+  left: 414px;
+}
+
+.infoItem {
+  padding: 20px 21px 26px 24px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.infoItem > h3 {
+  font-size: 24px;
+  line-height: 28.8px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.infoItem > p {
+  font-size: 14px;
+  line-height: 18.62px;
+  font-weight: 600;
+  color: #ff9414;
+}

@@ -49,7 +49,7 @@ const useBasketStore = create(
           total_amount: totalAmount,
           shipping_address: shippingAddress,
         };
-
+        console.log("Sending Order Data:", orderData); // Add this line
         const response = await fetch("http://localhost:8004/api/v1/orders", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -58,6 +58,7 @@ const useBasketStore = create(
 
         if (!response.ok) {
           const errorData = await response.json();
+          console.error("Server Error:", errorData); // Add this line
           throw new Error(errorData.detail || "Failed to create order");
         }
 

@@ -17,6 +17,7 @@ const ProductListingPage = lazy(() => import("../../pages/Catalog/ProductListing
 const ProductDetailsPage = lazy(() => import("../../pages/Catalog/ProductDetailsPage/ProductDetailsPage"));
 const ParentCategoryPage = lazy(() => import("../../pages/Catalog/ParentCategoryPage/ParentCategoryPage"));
 const ProfilePage = lazy(() => import("../../pages/Profile/ProfilePage"));
+const CheckoutPage = lazy(() => import("../../pages/CheckoutPage/CheckoutPage"));
 
 const AppRouter = () => {
   return (
@@ -24,13 +25,19 @@ const AppRouter = () => {
       <Layout>
         <Suspense fallback={<Loading />}>
           <Routes>
+            {/* Static Routes */}
             <Route path="/" element={<MainPage />} />
             <Route path="/company" element={<Company />} />
             <Route path="/guarantee" element={<GuaranteePage />} />
             <Route path="/delivery" element={<DeliveryPage />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/regular" element={<RegularCustomersPage />} />
+
+            {/* Basket Routes */}
             <Route path="/basket" element={<BasketPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+
+            {/* Blog Routes */}
             <Route path="/blog" element={<BlogListingPage />} />
             <Route path="/blog/:id" element={<BlogDetailsPage />} />
             
@@ -41,6 +48,7 @@ const AppRouter = () => {
             <Route path="/catalog/:parentId/:subcategoryId/:subSubcategoryId" element={<ProductListingPage />} />
             <Route path="/catalog/:parentId/:subcategoryId/:subSubcategoryId/:productId" element={<ProductDetailsPage />} />
             
+            {/* Profile Routes */}
             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </Suspense>
