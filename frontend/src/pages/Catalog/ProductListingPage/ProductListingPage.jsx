@@ -24,8 +24,6 @@ const ProductListingPage = () => {
     setFilter("page", newPage);
   };
 
-  console.log({ parentId, subcategoryId, subSubcategoryId, products });
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 

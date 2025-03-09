@@ -14,7 +14,6 @@ const BlogListingPage = () => {
       try {
         const data = await getAllBlogs();
         setBlogs(data);
-        console.log(data);
         
       } catch (error) {
         setError('Failed to load blogs');

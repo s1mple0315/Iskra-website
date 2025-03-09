@@ -6,7 +6,6 @@ const ProductDataDisplay = ({ product }) => {
 
   const handleAddToBasket = () => {
     if (!product) {
-      console.error("No product data available to add to basket");
       return;
     }
 

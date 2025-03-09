@@ -8,7 +8,6 @@ const fetchCategoryNameById = async (categoryId) => {
     const response = await axios.get(`http://localhost:8002/api/v1/categories/${categoryId}`);
     return response.data.name;
   } catch (err) {
-    console.error('Failed to fetch category name', err);
     return categoryId; 
   }
 };
@@ -18,7 +17,6 @@ const fetchProductNameById = async (productId) => {
     const response = await axios.get(`http://localhost:8002/api/v1/products/${productId}`);
     return response.data.name; 
   } catch (err) {
-    console.error('Failed to fetch product name', err);
     return productId; 
   }
 };

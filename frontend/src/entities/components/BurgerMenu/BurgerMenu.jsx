@@ -25,14 +25,6 @@ const BurgerMenu = () => {
   const previewImage = "/assets/iphone-preview.png";
   const selectedParent = categories.find((cat) => cat.id === selectedParentId);
 
-  // Debugging: Log the selected parent and its subcategories
-  useEffect(() => {
-    if (selectedParent) {
-      console.log("Selected Parent:", selectedParent);
-      console.log("Subcategories:", selectedParent.subcategories);
-    }
-  }, [selectedParent]);
-
   return (
     <div className={styles.burgerMenuContainer} onClick={toggleMenu}>
       <div className={styles.burgerMenu}>

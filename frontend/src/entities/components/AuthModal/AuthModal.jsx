@@ -39,7 +39,6 @@ const AuthModal = ({ isOpen, onClose }) => {
         {
           size: "invisible",
           callback: (response) => {
-            console.log("reCAPTCHA verified:", response);
           },
           "expired-callback": () => {
             setError("reCAPTCHA expired, please refresh the page.");
@@ -71,7 +70,6 @@ const AuthModal = ({ isOpen, onClose }) => {
       setConfirmation(confirmationResult);
     } catch (err) {
       setError("Ошибка при отправке OTP: " + err.message);
-      console.error("OTP Error:", err);
     } finally {
       setLoading(false);
     }
@@ -100,16 +98,13 @@ const AuthModal = ({ isOpen, onClose }) => {
       );
       if (response.data && response.data.token) {
         localStorage.setItem("token", response.data.token);
-        console.log("✅ Token saved:", response.data.token);
       } else {
         console.error("❌ No token received from backend:", response.data);
       }
 
-      console.log("User registered:", response.data);
       onClose();
     } catch (err) {
       setError("Ошибка проверки OTP: " + err.message);
-      console.error("Verification Error:", err);
     } finally {
       setLoading(false);
     }

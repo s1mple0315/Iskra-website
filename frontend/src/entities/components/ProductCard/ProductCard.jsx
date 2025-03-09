@@ -23,7 +23,6 @@ const ProductCard = ({
       price: price,
       images: ["/assets/Catalog/ProductImages/iPhone/iPhone.png"],
     };
-    console.log(basketItem);
     addItem(basketItem);
   };
 

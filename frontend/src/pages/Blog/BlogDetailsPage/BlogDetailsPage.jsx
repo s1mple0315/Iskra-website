@@ -15,7 +15,6 @@ const BlogDetailsPage = () => {
       try {
         const data = await getBlogById(id);
         setBlog(data);
-        console.log(data);
       } catch (error) {
         setError("Failed to load blog details");
       } finally {

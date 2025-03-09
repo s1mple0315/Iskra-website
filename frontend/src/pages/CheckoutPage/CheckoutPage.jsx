@@ -26,17 +26,13 @@ const CheckoutPage = () => {
       return;
     }
   
-    console.log("Sending Order with Data:", customerData, items); // ✅ Debugging log
-  
     setLoading(true);
     setError(null);
   
     try {
       const order = await checkout("user123", customerData.address);
-      console.log("Order Successful:", order);
       clearBasket();
     } catch (err) {
-      console.error("Checkout Error:", err);
       setError(err.message || "Ошибка при оформлении заказа");
     } finally {
       setLoading(false);
