@@ -1,22 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import styles from './BlogListingPage.module.css';
-import { getAllBlogs } from '../../../config/api/Blogs/BlogsAPI'; 
-import BlogCard from '../../../entities/components/BlogCard/BlogCard';
+import styles from "./BlogListingPage.module.css";
+import { getAllBlogs } from "../../../config/api/Blogs/BlogsAPI";
+import BlogCard from "../../../entities/components/BlogCard/BlogCard";
+import { Link } from "react-router-dom";
 
 const BlogListingPage = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  console.log(blogs);
+
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         const data = await getAllBlogs();
         setBlogs(data);
-        
       } catch (error) {
-        setError('Failed to load blogs');
+        setError("Failed to load blogs");
       } finally {
         setLoading(false);
       }
@@ -36,7 +38,9 @@ const BlogListingPage = () => {
       ) : (
         <ul className={styles.blogList}>
           {blogs.map((blog) => (
-            <BlogCard key={blog.id} image={blog.image} title={blog.title} />
+            <Link key={blog.id} to={`/blog/${blog.id}`} className={styles.blogLink}>
+              <BlogCard  image={blog.image} title={blog.title} />
+            </Link>
           ))}
         </ul>
       )}
