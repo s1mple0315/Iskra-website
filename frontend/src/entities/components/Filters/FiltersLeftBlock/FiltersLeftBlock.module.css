@@ -1,3 +1,7 @@
 .filtersLeftBlock{
     width: 100%;
 }
+
+.accordionContent{
+    padding: 15px;
+}

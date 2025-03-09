@@ -1,0 +1,64 @@
+.cont input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  .cont {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;
+    gap: 8px;
+  }
+  
+  .radiomark {
+    position: relative;
+    height: 1.3em;
+    width: 1.3em;
+    background-color: #ccc;
+    border-radius: 50%;
+    transition: all 0.3s;
+  }
+  
+  .cont input:checked ~ .radiomark {
+    background-color: #ff9414;
+    animation: pop 0.5s;
+    animation-direction: alternate;
+  }
+  
+  .radiomark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  .cont input:checked ~ .radiomark:after {
+    display: block;
+  }
+  
+  .cont .radiomark:after {
+    left: 50%;
+    top: 50%;
+    width: 0.5em;
+    height: 0.5em;
+    background: white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  @keyframes pop {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  

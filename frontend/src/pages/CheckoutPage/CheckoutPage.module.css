@@ -1,3 +1,24 @@
+.checkoutPageHeader{
+  margin-bottom: 48px;
+}
+
+.checkoutPageHeader h3 {
+  font-size: 36px;
+  line-height: 48px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.checkoutPageHeader p {
+  font-size: 16px;
+  line-height: 21.28px;
+  margin: 0;
+}
+
+.checkoutPageHeader p > span {
+  color: #ff9414;
+}
+
 .checkoutSteps {
   padding: 5.5px 16px;
   border-radius: 100px;
@@ -5,6 +26,7 @@
   height: 32px;
   background-color: #ff9414;
   color: #fff;
+  margin-bottom: 20px;
 }
 
 .checkoutSteps p {
@@ -35,6 +57,17 @@
   font-size: 16px;
   line-height: 21.28px;
   font-weight: 600;
+}
+
+.checkoutStepsData h3 {
+  font-size: 24px;
+  line-height: 28.8px;
+  font-weight: 700;
+  margin-bottom: 36px;
+}
+
+.checkoutStepsData {
+  margin-bottom: 48px;
 }
 
 .paymentMethod {

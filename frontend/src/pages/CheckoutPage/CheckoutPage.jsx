@@ -5,9 +5,11 @@ import Wallet from "../../shared/ui/icons/Checkout/Wallet/Wallet";
 import styles from "./CheckoutPage.module.css";
 
 const CheckoutPage = () => {
-  const { checkout, items, clearBasket, getTotalPrice } = useBasketStore();
+  const { checkout, items, clearBasket, getTotalPrice, getTotalItems } = useBasketStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  
 
   const [customerData, setCustomerData] = useState({
     phone: "",
@@ -40,13 +42,16 @@ const CheckoutPage = () => {
   };
   
   return (
-    <div className={styles}>
-      <section></section>
+    <div className={styles.checkoutPage}>
+      <section className={styles.checkoutPageHeader}>
+        <h3>Оформление</h3>
+        <p>Оформляем <span>{getTotalItems()} товаров ({getTotalPrice()}₽)</span></p>
+      </section>
       <section>
         <div className={styles.checkoutSteps}>
           <p>Шаг 1 из 3</p>
         </div>
-        <div>
+        <div className={styles.checkoutStepsData}>
           <h3>Данные покупателя</h3>
           <div className={styles.customerDetails}>
             <div>
@@ -75,7 +80,7 @@ const CheckoutPage = () => {
         <div className={styles.checkoutSteps}>
           <p>Шаг 2 из 3</p>
         </div>
-        <div>
+        <div className={styles.checkoutStepsData}>
           <h3>Выберите способ оплаты</h3>
           <div
             className={`${styles.paymentMethod} d-flex flex-column align-items-center justify-content-center`}
@@ -89,7 +94,7 @@ const CheckoutPage = () => {
         <div className={styles.checkoutSteps}>
           <p>Шаг 3 из 3</p>
         </div>
-        <div>
+        <div className={styles.checkoutStepsData}>
           <h3>Выберите способ получения</h3>
           <CheckoutTabs />
         </div>
