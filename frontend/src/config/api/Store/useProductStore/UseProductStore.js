@@ -2,7 +2,7 @@ import { create } from "zustand";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8002/api/v1/products", // Confirmed as 8000 from your earlier tests
+  baseURL: "http://localhost:8002/api/v1/products", 
 });
 
 const useProductStore = create((set) => ({

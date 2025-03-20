@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./MainPage.module.css";
 import ParentCategory from "../../entities/components/ParentCategory/ParentCategory";
 import BrandLogos from "../../entities/components/BrandLogos/BrandLogos";
-import useProductStore from "../../config/api/Store/useProductStore/useProductStore";
+import useProductStore from "../../config/api/Store/useProductStore/UseProductStore"
 import ProductCard from "../../entities/components/ProductCard/ProductCard";
 import { getAllBlogs } from "../../config/api/Blogs/BlogsAPI";
 import BlogCard from "../../entities/components/BlogCard/BlogCard"
@@ -11,15 +11,11 @@ const MainPage = () => {
   const [blogs, setBlogs] = useState([]);
   const { products, fetchProducts, fetchCategories } = useProductStore();
 
-  // Fetch categories and products for Featured and New sections
   useEffect(() => {
-    // Fetch categories (optional, for consistency with store)
     fetchCategories();
 
-    // Fetch products for Featured Products (iPhone 14)
     fetchProducts("67c8d739fd0026bd0691207c");
 
-    // Fetch products for New Products (Blender)
     fetchProducts("67c8d73afd0026bd069120b8");
   }, [fetchCategories, fetchProducts]);
 
@@ -37,7 +33,6 @@ const MainPage = () => {
 
   return (
     <div className={styles.mainPage}>
-      {/* <section className={styles.bannerSection}>Banner</section> */}
       <section className={styles.catalogSection}>
         <ParentCategory />
       </section>
